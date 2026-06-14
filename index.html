@@ -10,12 +10,13 @@
 <title>Ma semaine — Inès</title>
 <style>
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{margin:0;font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f4f5f8;color:#222;line-height:1.5}
+  body{margin:0;font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f4f5f8;color:#222;line-height:1.5;transition:background .3s}
   .app{max-width:480px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:80px}
-  .hdr{background:linear-gradient(135deg,#ff7eb3,#c0398b,#6f42c1);color:#fff;padding:16px 16px 14px;text-align:center}
+  .hdr{position:relative;background:linear-gradient(135deg,#ff7eb3,#c0398b,#6f42c1);color:#fff;padding:16px 16px 14px;text-align:center}
   .ava{width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.22);border:3px solid rgba(255,255,255,.75);display:inline-block;line-height:70px;font-size:34px;text-align:center}
   .hdr h1{font-size:20px;margin:8px 0 2px;font-weight:800}
   .hdr .sub{font-size:12px;opacity:.95}
+  #darkBtn{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.25);border:none;color:#fff;font-size:18px;width:38px;height:38px;border-radius:50%;cursor:pointer}
   .sec{padding:14px 16px;display:none}
   .sec.on{display:block}
   h2{font-size:17px;color:#1a5fb4;border-bottom:2px solid #1a5fb4;padding-bottom:4px;margin:4px 0 12px}
@@ -38,9 +39,9 @@
   .bar > i{display:block;height:100%;background:linear-gradient(90deg,#1f9d55,#6f42c1);width:0}
   a{color:#1a5fb4}
   .note{font-size:12px;color:#888}
-  .water{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
-  .water span{font-size:24px;cursor:pointer;filter:grayscale(1);opacity:.5}
-  .water span.full{filter:none;opacity:1}
+  .icons{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+  .icons span{font-size:24px;cursor:pointer;filter:grayscale(1);opacity:.5}
+  .icons span.full{filter:none;opacity:1}
   .ex{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;cursor:pointer}
   .ex .cb{width:20px;height:20px;border:2px solid #cbb5ec;border-radius:5px;flex:0 0 auto;text-align:center;line-height:18px;color:#fff;font-size:13px}
   .ex.done .cb{background:#1f9d55;border-color:#1f9d55}
@@ -59,19 +60,33 @@
   .breath{width:130px;height:130px;border-radius:50%;margin:14px auto;background:radial-gradient(circle,#c0398b,#6f42c1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;transition:transform 4s ease-in-out;transform:scale(.6)}
   .breath.in{transform:scale(1.1)}
   label{display:block;font-size:13px;font-weight:600;margin:8px 0 3px;color:#444}
-  input,select{width:100%;padding:10px;border:1px solid #ddd;border-radius:9px;font-size:14px;font-family:inherit}
+  input,select,textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:9px;font-size:14px;font-family:inherit}
   .es{background:linear-gradient(135deg,#ffd166,#ef476f);color:#fff;border:none}
+  .quizopt{background:#f3eefc;border:1px solid #e0d2f7;border-radius:9px;padding:9px;margin:4px 0;font-size:14px;cursor:pointer;text-align:center}
+  .quizopt.ok{background:#d8f5e3;border-color:#1f9d55}.quizopt.no{background:#fde0e6;border-color:#c0398b}
   .tabbar{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:#fff;border-top:1px solid #e6e6ea;display:flex;overflow-x:auto;padding:6px 2px 8px}
-  .tabbar button{background:none;border:none;font-size:10px;color:#999;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:56px;flex:1 0 auto}
+  .tabbar button{background:none;border:none;font-size:10px;color:#999;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:54px;flex:1 0 auto}
   .tabbar button .e{font-size:18px}
   .tabbar button.on{color:#6f42c1;font-weight:700}
   .celebrate{text-align:center;font-size:14px;color:#1f9d55;font-weight:700;margin-top:6px;display:none}
+  /* dark mode */
+  body.dark{background:#0d0e12}
+  body.dark .app{background:#15161c}
+  body.dark .card{background:#1e1f27;border-color:#2e2f3a;color:#e6e6ea}
+  body.dark h2{color:#b89cf0;border-color:#b89cf0}
+  body.dark h3,body.dark b{color:#edEDF2}
+  body.dark td{border-color:#2e2f3a;color:#dcdce2}
+  body.dark .note{color:#9a9aa5}
+  body.dark input,body.dark select,body.dark textarea{background:#262732;color:#e6e6ea;border-color:#3a3b48}
+  body.dark .tabbar{background:#15161c;border-color:#2e2f3a}
+  body.dark .day b{background:#241f33;border-color:#3a3350}
 </style>
 </head>
 <body>
 <div class="app">
 
   <div class="hdr">
+    <button id="darkBtn" title="Mode sombre">🌙</button>
     <div class="ava">🌸</div>
     <h1>Ma semaine 💛</h1>
     <div class="sub" id="dateline">Tout pour avancer, à ton rythme</div>
@@ -79,7 +94,11 @@
 
   <!-- ACCUEIL -->
   <div class="sec on" id="t-accueil">
+    <div class="card grad" id="levelCard" style="text-align:center"><b>Niveau 1</b> · 0 pt cette semaine</div>
     <div class="card grad"><b>Aujourd'hui</b> <span id="todayName"></span><div id="todayBox" style="margin-top:6px;font-size:14px"></div></div>
+
+    <h3>🇪🇸 Quiz express d'espagnol</h3>
+    <div class="card" id="quizCard"></div>
 
     <div class="card" style="background:#fffef5;border-color:#f0e6b8"><b>💬 Pensée du jour</b><div id="quote" style="font-style:italic;margin-top:3px"></div></div>
     <div class="card es"><b>🇪🇸 Mot d'espagnol du jour</b><div id="esword" style="margin-top:3px;font-size:15px"></div></div>
@@ -98,15 +117,22 @@
     <div class="celebrate" id="celebrate">🎉 Semaine au top, bravo mon amour !</div>
 
     <h3>💧 Mon eau du jour</h3>
-    <div class="water" id="water"></div>
-    <div class="note" id="waterTxt">Objectif : 8 verres</div>
+    <div class="icons" id="water"></div>
+    <div class="note" id="waterTxt"></div>
+
+    <h3>⚙️ Mes objectifs perso</h3>
+    <div class="card">
+      <div style="display:flex;gap:8px">
+        <div style="flex:1"><label>Eau /jour</label><input id="gWater" type="number" min="1" max="15"></div>
+        <div style="flex:1"><label>Protéines /jour</label><input id="gProt" type="number" min="1" max="10"></div>
+        <div style="flex:1"><label>Séances /sem</label><input id="gSess" type="number" min="1" max="7"></div>
+      </div>
+    </div>
 
     <h3>🎯 Objectifs du mois</h3>
     <div class="card" id="goals"></div>
-
     <h3>🏅 Mes badges</h3>
     <div class="card" id="badges" style="font-size:22px">—</div>
-
     <h3>📊 Mes stats</h3>
     <div class="card" id="stats" style="font-size:13px"></div>
   </div>
@@ -124,31 +150,32 @@
       <tr><td><b>Sam</b></td><td>Muscu COMPLÈTE ~1h15 (avec Steve)</td></tr>
       <tr><td><b>Dim</b></td><td>Cardio LONG 45-60 min + étirements</td></tr>
     </table>
-
     <h3 style="color:#6f42c1">⏱️ Minuteur de repos</h3>
     <div class="card timer">
       <div class="big" id="tdisp">00:00</div>
       <button onclick="startTimer(45)">45 s</button><button onclick="startTimer(60)">60 s</button><button onclick="startTimer(75)">75 s</button><button onclick="startTimer(90)">90 s</button>
       <button onclick="stopTimer()" style="background:#f3d6e6;color:#c0398b">stop</button>
     </div>
-
     <h3 style="color:#1a5fb4">⚡ Muscu express (coche tes exos)</h3>
     <div class="card" id="exExpress"></div>
     <h3 style="color:#1f9d55">💪 Muscu complète (week-end)</h3>
     <div class="card" id="exComplete"></div>
-    <div class="note">🏃 Cardio long du dimanche = zone 2 (tu peux parler). Prendre du muscle = +1 peu de charge quand 12 reps deviennent faciles.</div>
+    <div class="note">🏃 Cardio long du dimanche = zone 2. Prendre du muscle = +1 peu de charge quand 12 reps deviennent faciles.</div>
   </div>
 
   <!-- REPAS -->
   <div class="sec" id="t-repas">
     <h2 style="color:#e8590c;border-color:#e8590c">🍽️ Repas</h2>
     <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b>🥣 Petit-déj overnight</b><br>Flocons + yaourt grec + graines de chia + fruits. Préparé la veille.</div>
+    <h3>🎲 Menu surprise de la semaine</h3>
+    <button class="btn green" id="menuBtn">Générer un menu</button>
+    <div class="card" id="menuOut" style="display:none"></div>
     <h3>5 idées du soir <span class="note">(tape pour la recette)</span></h3>
     <div id="recipes"></div>
-    <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b style="color:#c0392b">💡 Protéines à CHAQUE repas</b><br>œufs · poulet · poisson · lentilles · pois chiches · skyr · tofu. <span class="note">(tu oublies souvent 😉)</span></div>
+    <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b style="color:#c0392b">💡 Protéines à CHAQUE repas</b><br>œufs · poulet · poisson · lentilles · pois chiches · skyr · tofu.</div>
     <h3>🥩 Mes protéines du jour</h3>
-    <div class="water" id="prot"></div>
-    <div class="note" id="protTxt">Objectif : 4 portions</div>
+    <div class="icons" id="prot"></div>
+    <div class="note" id="protTxt"></div>
     <h3>🛒 Liste de courses Lidl <span class="note">(coche)</span></h3>
     <div class="card" id="shop"></div>
   </div>
@@ -156,15 +183,14 @@
   <!-- ARGENT -->
   <div class="sec" id="t-argent">
     <h2 style="color:#b8860b;border-color:#b8860b">💰 Argent</h2>
-    <div class="card" style="background:#fffdf0;border-color:#f0e0a8">Pense à <b>mettre de l'argent sur ton PEA</b> 💛 — et <b>SURTOUT à acheter ton ETF</b> derrière (virer ne suffit pas !). L'idéal : un <b>virement + investissement automatique</b>.</div>
+    <div class="card" style="background:#fffdf0;border-color:#f0e0a8">Pense à <b>mettre de l'argent sur ton PEA</b> 💛 — et <b>SURTOUT à acheter ton ETF</b> (virer ne suffit pas !). L'idéal : un <b>virement + investissement automatique</b>.</div>
     <button class="btn gold" id="peaBtn">Marquer « PEA investi » ce mois ✅</button>
     <div class="streak" id="peaState" style="color:#b8860b"></div>
     <h3>📈 Mon historique</h3>
     <div class="card" id="peaHist" style="font-size:13px"></div>
-    <div class="note">Un rappel mensuel est aussi dans ton calendrier (onglet Agenda).</div>
   </div>
 
-  <!-- MOTIV / BIEN-ETRE -->
+  <!-- BIEN-ETRE -->
   <div class="sec" id="t-motiv">
     <h2 style="color:#c0398b;border-color:#c0398b">🔥 Bien-être</h2>
     <div class="card" style="background:#fff0f3;border-color:#ffd2dc;color:#8a1c3b"><b>Mantra :</b> « Je n'ai pas besoin d'être motivée pour commencer — je commence, et la motivation suit. »</div>
@@ -172,50 +198,34 @@
     <div class="mood" id="mood"><span data-m="😣">😣</span><span data-m="😕">😕</span><span data-m="😐">😐</span><span data-m="🙂">🙂</span><span data-m="😄">😄</span></div>
     <div class="note" id="moodTxt" style="text-align:center"></div>
     <h3>🫁 Respire 1 minute</h3>
-    <div class="card" style="text-align:center">
-      <div class="breath" id="breath">Prête ?</div>
-      <button class="btn pink" id="breathBtn" style="max-width:200px;margin:0 auto">Démarrer</button>
-    </div>
+    <div class="card" style="text-align:center"><div class="breath" id="breath">Prête ?</div><button class="btn pink" id="breathBtn" style="max-width:200px;margin:0 auto">Démarrer</button></div>
     <h3>🙏 Gratitude du jour</h3>
-    <div class="card"><textarea id="grat" rows="2" style="width:100%;border:1px solid #ddd;border-radius:9px;padding:8px;font-family:inherit;font-size:14px" placeholder="Une chose pour laquelle tu es reconnaissante aujourd'hui…"></textarea><div class="note" id="gratMsg"></div></div>
-
+    <div class="card"><textarea id="grat" rows="2" placeholder="Une chose pour laquelle tu es reconnaissante…"></textarea><div class="note" id="gratMsg"></div></div>
+    <h3>📔 Mon journal</h3>
+    <div class="card"><textarea id="jrn" rows="3" placeholder="Tes pensées du jour…"></textarea><div class="note" id="jrnMsg"></div></div>
     <h3>🌍 Mes langues aujourd'hui</h3>
     <div class="card" id="langs"></div>
-
     <h3>⚖️ Mon poids</h3>
-    <div class="card"><div style="display:flex;gap:8px"><input id="wIn" type="number" step="0.1" placeholder="kg" style="flex:1"><button class="btn" id="wBtn" style="width:auto;margin:0;padding:10px 16px">Ajouter</button></div><div id="wList" style="font-size:13px;margin-top:8px;color:#555"></div></div>
-
+    <div class="card"><div style="display:flex;gap:8px"><input id="wIn" type="number" step="0.1" placeholder="kg" style="flex:1"><button class="btn" id="wBtn" style="width:auto;margin:0;padding:10px 16px">Ajouter</button></div><div id="wSpark" style="margin-top:8px"></div><div id="wList" style="font-size:13px;margin-top:6px;color:#555"></div></div>
+    <h3>🔔 Rappels</h3>
+    <div class="card"><button class="btn pink" id="notifBtn" style="margin-top:0">Activer les rappels</button><div class="note" id="notifMsg">Le plus fiable reste le calendrier (onglet Agenda) — il marche même app fermée.</div></div>
     <h3>Anti-flemme</h3>
-    <div class="card" style="background:#fdf3f9;border-color:#f5cce6">
-      • <b>Règle des 5 min</b> : « juste 5 min », et tu finis presque toujours.<br>
-      • <b>Prépare la veille</b> : tenue + sac = zéro excuse.<br>
-      • <b>Le week-end avec Steve</b> ❤️<br>
-      • <b>Sois douce</b> : une séance manquée n'efface rien.
-    </div>
+    <div class="card" style="background:#fdf3f9;border-color:#f5cce6">• <b>Règle des 5 min</b> : « juste 5 min », et tu finis presque toujours.<br>• <b>Prépare la veille</b> : tenue + sac = zéro excuse.<br>• <b>Le week-end avec Steve</b> ❤️<br>• <b>Sois douce</b> : une séance manquée n'efface rien.</div>
   </div>
 
   <!-- AGENDA -->
   <div class="sec" id="t-agenda">
     <h2 style="color:#6f42c1;border-color:#6f42c1">📅 Agenda</h2>
-    <div class="card grad">
-      <b>Ma semaine type</b> — yoga, espagnol, séances sport & rappel PEA, qui <b>se répètent chaque semaine</b> avec notifications.
-      <a class="btn" style="background:#fff;color:#6f42c1;margin-top:8px" href="semaine-ines.ics" download="ma-semaine.ics">📲 Ajouter à mon calendrier</a>
-    </div>
-
+    <div class="card grad"><b>Ma semaine type</b> — yoga, espagnol, séances sport & rappel PEA, qui <b>se répètent chaque semaine</b> avec notifications.<a class="btn" style="background:#fff;color:#6f42c1;margin-top:8px" href="semaine-ines.ics" download="ma-semaine.ics">📲 Ajouter à mon calendrier</a></div>
     <h3>➕ Créer un événement</h3>
     <div class="card">
       <label>Activité *</label><input id="evTitle" placeholder="Ex : RDV médecin, déjeuner…">
       <label>Avec qui ?</label><input id="evWith" placeholder="Ex : Maman, Dr Martin…">
       <label>Lieu</label><input id="evLoc" placeholder="Ex : Marseille, à la maison…">
       <label>Date *</label><input id="evDate" type="date">
-      <div style="display:flex;gap:8px">
-        <div style="flex:1"><label>Début *</label><input id="evStart" type="time" value="18:00"></div>
-        <div style="flex:1"><label>Fin</label><input id="evEnd" type="time" value="19:00"></div>
-      </div>
-      <label>Répéter</label>
-      <select id="evRep"><option value="">Une seule fois</option><option value="WEEKLY">Chaque semaine</option><option value="MONTHLY">Chaque mois</option></select>
-      <label>Rappel</label>
-      <select id="evAlarm"><option value="-PT0M">À l'heure</option><option value="-PT15M" selected>15 min avant</option><option value="-PT30M">30 min avant</option><option value="-PT1H">1 h avant</option><option value="-P1D">1 jour avant</option></select>
+      <div style="display:flex;gap:8px"><div style="flex:1"><label>Début *</label><input id="evStart" type="time" value="18:00"></div><div style="flex:1"><label>Fin</label><input id="evEnd" type="time" value="19:00"></div></div>
+      <label>Répéter</label><select id="evRep"><option value="">Une seule fois</option><option value="WEEKLY">Chaque semaine</option><option value="MONTHLY">Chaque mois</option></select>
+      <label>Rappel</label><select id="evAlarm"><option value="-PT0M">À l'heure</option><option value="-PT15M" selected>15 min avant</option><option value="-PT30M">30 min avant</option><option value="-PT1H">1 h avant</option><option value="-P1D">1 jour avant</option></select>
       <button class="btn pink" id="evBtn">📅 Ajouter à mon calendrier</button>
       <div class="note" id="evMsg" style="text-align:center"></div>
     </div>
@@ -233,12 +243,7 @@
     <h3>🔎 Boards</h3>
     <div class="card" style="font-size:13px"><a href="https://choisirleservicepublic.gouv.fr/">Service public</a> · <a href="https://careers.un.org/">UN Careers</a> · <a href="https://www.impactpool.org/search/human%20rights">Impactpool</a> · <a href="https://jobs.humanrightscareers.com/">Human Rights Careers</a> · <a href="https://fr.indeed.com/q-juriste-droit-des-%C3%89trangers-t%C3%A9l%C3%A9travail-emplois.html">Indeed télétravail</a></div>
     <h3>📋 Mes candidatures</h3>
-    <div class="card">
-      <div style="display:flex;gap:6px"><input id="jc" placeholder="Entreprise" style="flex:1"><input id="jr" placeholder="Poste" style="flex:1"></div>
-      <button class="btn" id="jBtn" style="margin-top:8px">+ Ajouter</button>
-      <div id="jList" style="margin-top:8px"></div>
-      <div class="note">Tape le statut pour le faire avancer (À postuler → Envoyé → Entretien → Réponse).</div>
-    </div>
+    <div class="card"><div style="display:flex;gap:6px"><input id="jc" placeholder="Entreprise" style="flex:1"><input id="jr" placeholder="Poste" style="flex:1"></div><button class="btn" id="jBtn" style="margin-top:8px">+ Ajouter</button><div id="jList" style="margin-top:8px"></div><div class="note">Tape le statut pour le faire avancer.</div></div>
   </div>
 
   <!-- NOUS -->
@@ -273,8 +278,11 @@
   function LG(k){try{return localStorage.getItem(k)}catch(e){return null}}
   function LS(k,v){try{localStorage.setItem(k,v)}catch(e){}}
   function LR(k){try{localStorage.removeItem(k)}catch(e){}}
-  var today=new Date(); var di=(today.getDay()+6)%7;
+  var today=new Date(); var di=(today.getDay()+6)%7; var iso=today.toISOString().slice(0,10);
   var dn=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+
+  if(LG('dark')==='1')document.body.classList.add('dark');
+  $('#darkBtn').addEventListener('click',function(){document.body.classList.toggle('dark');LS('dark',document.body.classList.contains('dark')?'1':'0');});
 
   var tb=$('#tabbar');
   tb.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var t=b.getAttribute('data-t');
@@ -287,13 +295,8 @@
   var quotes=['Tu es plus forte que tu ne le crois 💪','Un petit pas vaut mieux qu\'un grand rêve immobile.','Fais-le pour la fille que tu seras dans 1 an.','La régularité bat la motivation.','Tu n\'as pas à être parfaite, juste régulière.','Chaque séance compte, même la plus courte.','Respire. Tu gères plus que tu ne le penses.','Le progrès, pas la perfection.','Sois fière du chemin déjà fait.','Aujourd\'hui est un bon jour pour prendre soin de toi.','Ta santé est ton meilleur investissement.','Doucement mais sûrement, tu y arrives.','Tu mérites de te sentir bien.','Crois en toi autant que Steve croit en toi 💛'];
   var es=[['¡Vamos!','Allez, on y va !'],['Tengo hambre','J\'ai faim'],['¿Cómo estás?','Comment vas-tu ?'],['Estoy cansada','Je suis fatiguée'],['Hoy entreno','Aujourd\'hui je m\'entraîne'],['Me siento bien','Je me sens bien'],['Buen provecho','Bon appétit'],['Poco a poco','Petit à petit'],['Sin prisa','Sans se presser'],['Lo estoy logrando','J\'y arrive'],['Cuídate','Prends soin de toi'],['¡Qué rico!','Comme c\'est bon !'],['Necesito agua','J\'ai besoin d\'eau'],['Estoy orgullosa','Je suis fière'],['Mañana será mejor','Demain sera meilleur'],['Trabajo en mi futuro','Je travaille pour mon avenir'],['Respira hondo','Respire profondément'],['Tú puedes','Tu peux le faire'],['Hoy descanso','Aujourd\'hui je me repose'],['Vamos a cocinar','Allons cuisiner']];
   var love=['Tu illumines mes journées 💛','Je suis chanceux de t\'avoir, Inès.','Penser à toi = sourire automatique 😊','Tu vas y arriver, je n\'ai aucun doute.','Fier de la femme que tu es.','Repose-toi bien, tu le mérites.','Je t\'aime un peu plus chaque jour.','Tu es ma personne préférée 🥰','On forme une sacrée équipe, toi et moi.','Quoi qu\'il arrive, je suis là.','Ta force m\'inspire.','Le meilleur reste à venir, ensemble.'];
-  var recipes=[
-    ['Poêlée courgettes-aubergines + poulet','Coupe courgette + aubergine en dés. Fais revenir 10 min à l\'huile d\'olive. Ajoute le poulet coupé, sel/poivre/herbes. Sers avec du boulgour. ~25 min.'],
-    ['Ratatouille maison + œufs','Aubergine, courgette, poivron, tomate en dés. Mijote 25 min avec ail/herbes. Casse 2 œufs dessus en fin de cuisson. ~30 min.'],
-    ['Dahl de lentilles corail','Fais revenir oignon + curry. Ajoute 200 g lentilles corail + 50 cl eau + lait de coco. Mijote 18 min. Ajoute épinards. Sers avec riz. ~25 min.'],
-    ['Saumon + courgettes rôties','Courgettes + patate douce en tranches au four 25 min (200°). Ajoute le pavé de saumon les 12 dernières min. Citron. ~30 min.'],
-    ['Wok tofu/bœuf + légumes','Fais sauter tofu (ou bœuf) à feu vif. Ajoute légumes croquants + sauce soja + gingembre. Sers avec nouilles complètes. ~20 min.']
-  ];
+  var recipes=[['Poêlée courgettes-aubergines + poulet','Coupe courgette + aubergine en dés. Revenir 10 min. Ajoute le poulet, sel/poivre/herbes. Sers avec boulgour. ~25 min.'],['Ratatouille maison + œufs','Aubergine, courgette, poivron, tomate. Mijote 25 min. Casse 2 œufs dessus. ~30 min.'],['Dahl de lentilles corail','Oignon + curry, 200 g lentilles corail + eau + lait de coco. 18 min. Épinards. Riz. ~25 min.'],['Saumon + courgettes rôties','Courgettes + patate douce au four 25 min (200°). Saumon les 12 dernières min. Citron. ~30 min.'],['Wok tofu/bœuf + légumes','Tofu (ou bœuf) à feu vif. Légumes + soja + gingembre. Nouilles complètes. ~20 min.']];
+  var menuPool=['Poêlée courgettes-aubergines + poulet','Ratatouille + œufs','Dahl de lentilles + épinards','Saumon + courgettes + patate douce','Wok tofu + légumes + nouilles','Curry de pois chiches + riz','Buddha bowl quinoa','Omelette + grande salade','Soupe de légumes + pain complet + fromage','Chili sin carne + riz','Poisson blanc + brocoli + boulgour','Gratin de courgettes + lentilles'];
   var shopItems=['Aubergines','Courgettes','Poivrons','Épinards','Fruits rouges','Bananes','Œufs','Poulet','Saumon','Lentilles corail','Pois chiches','Yaourt grec / skyr','Flocons d\'avoine','Graines de chia','Boulgour / quinoa','Tofu'];
   var exExpress=['A. Presse à cuisses + Leg curl — 3×12','B. Chest press + Tirage vertical — 3×12','C. Curl biceps + Extension triceps — 2×12','D. Gainage 3×40 s'];
   var exComplete=['Presse à cuisses 3×12','Leg curl 3×12','Abducteurs 3×15','Chest press 3×12','Développé épaules 3×12','Tirage vertical 3×12','Rowing 3×12','Curl biceps 3×12','Triceps 3×12','Abdos 3×15'];
@@ -306,22 +309,41 @@
   $('#esword').innerHTML='<b>'+es[doy%es.length][0]+'</b> — '+es[doy%es.length][1];
   $('#loveDay').textContent=love[doy%love.length];
 
+  // quiz espagnol
+  (function(){var ans=es[doy%es.length];var opts=[ans];while(opts.length<3){var c=es[Math.floor(Math.random()*es.length)];if(opts.indexOf(c)<0)opts.push(c);}
+   for(var i=opts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=opts[i];opts[i]=opts[j];opts[j]=t;}
+   var box=$('#quizCard');box.innerHTML='<div style="font-size:14px;margin-bottom:6px">Comment dit-on : <b>'+ans[1]+'</b> ?</div>';
+   var done=false;opts.forEach(function(o){var d=document.createElement('div');d.className='quizopt';d.textContent=o[0];d.addEventListener('click',function(){if(done)return;done=true;
+     if(o===ans){d.className='quizopt ok';d.textContent='✅ '+o[0];var sc=+(LG('quizScore')||0)+1;LS('quizScore',sc);}else{d.className='quizopt no';d.textContent='❌ '+o[0];box.querySelectorAll('.quizopt').forEach(function(x,k){if(opts[k]===ans){x.className='quizopt ok';}});}
+     var p=document.createElement('div');p.className='note';p.style.textAlign='center';p.textContent='Score total : '+(LG('quizScore')||0);box.appendChild(p);});box.appendChild(d);});})();
+
   function wkey(){var d=new Date();var o=(d.getDay()+6)%7;d.setDate(d.getDate()-o);return 'trk_'+d.toISOString().slice(0,10);}
   var tk=wkey(),ts=gj(tk,[0,0,0,0,0,0,0]);
+  var sessGoal=gj('gSess',4);
   function rtrk(){document.querySelectorAll('#tracker b').forEach(function(b){b.classList.toggle('done',!!ts[+b.getAttribute('data-d')])});
     var n=ts.reduce(function(a,b){return a+(b?1:0)},0);$('#weekbar').style.width=(n/7*100)+'%';
-    $('#streak').textContent=n===0?'Coche tes jours actifs 👆':n+'/7 jours '+(n>=4?'🔥':'💪');
-    $('#celebrate').style.display=n>=5?'block':'none';}
-  $('#tracker').addEventListener('click',function(e){var b=e.target.closest('b');if(!b)return;var i=+b.getAttribute('data-d');ts[i]=ts[i]?0:1;sj(tk,ts);rtrk();});rtrk();
+    $('#streak').textContent=n===0?'Coche tes jours actifs 👆':n+'/7 jours '+(n>=sessGoal?'🔥':'💪');
+    $('#celebrate').style.display=n>=sessGoal?'block':'none';updateLevel();}
+  $('#tracker').addEventListener('click',function(e){var b=e.target.closest('b');if(!b)return;var i=+b.getAttribute('data-d');ts[i]=ts[i]?0:1;sj(tk,ts);rtrk();});
 
-  var wk='water_'+today.toISOString().slice(0,10),wv=gj(wk,0),wbox=$('#water');
-  for(var i=0;i<8;i++){var s=document.createElement('span');s.textContent='💧';s.setAttribute('data-i',i);wbox.appendChild(s);}
-  function rwater(){wbox.querySelectorAll('span').forEach(function(s,i){s.classList.toggle('full',i<wv)});$('#waterTxt').textContent=wv+'/8 verres'+(wv>=8?' 🎉':'');}
-  wbox.addEventListener('click',function(e){var s=e.target.closest('span');if(!s)return;var i=+s.getAttribute('data-i');wv=(i+1===wv)?i:i+1;sj(wk,wv);rwater();});rwater();
+  // compteurs réglables (eau, protéines)
+  var waterGoal=gj('gWater',8),protGoal=gj('gProt',4);
+  var wk='water_'+iso,wv=gj(wk,0),pk2='prot_'+iso,pv=gj(pk2,0);
+  function buildIcons(el,goal,getv,setv,emoji,unit){var box=$(el);box.innerHTML='';for(var i=0;i<goal;i++){var s=document.createElement('span');s.textContent=emoji;s.setAttribute('data-i',i);box.appendChild(s);}
+    function r(){box.querySelectorAll('span').forEach(function(s,i){s.classList.toggle('full',i<getv())});}
+    box.onclick=function(e){var s=e.target.closest('span');if(!s)return;var i=+s.getAttribute('data-i');setv((i+1===getv())?i:i+1);r();updTxt();updateLevel();};r();return r;}
+  function updTxt(){$('#waterTxt').textContent=wv+'/'+waterGoal+' verres'+(wv>=waterGoal?' 🎉':'');$('#protTxt').textContent=pv+'/'+protGoal+' portions'+(pv>=protGoal?' 💪':'');}
+  var rwater=buildIcons('#water',waterGoal,function(){return wv},function(v){wv=v;sj(wk,wv)},'💧');
+  var rprot=buildIcons('#prot',protGoal,function(){return pv},function(v){pv=v;sj(pk2,pv)},'🥩');
+  updTxt();
+  $('#gWater').value=waterGoal;$('#gProt').value=protGoal;$('#gSess').value=sessGoal;
+  $('#gWater').addEventListener('change',function(){waterGoal=Math.max(1,Math.min(15,+this.value||8));sj('gWater',waterGoal);rwater=buildIcons('#water',waterGoal,function(){return wv},function(v){wv=v;sj(wk,wv)},'💧');updTxt();});
+  $('#gProt').addEventListener('change',function(){protGoal=Math.max(1,Math.min(10,+this.value||4));sj('gProt',protGoal);rprot=buildIcons('#prot',protGoal,function(){return pv},function(v){pv=v;sj(pk2,pv)},'🥩');updTxt();});
+  $('#gSess').addEventListener('change',function(){sessGoal=Math.max(1,Math.min(7,+this.value||4));sj('gSess',sessGoal);rtrk();});
+  rtrk();
 
   function buildEx(arr,el,key){var box=$(el),st=gj(key,{});arr.forEach(function(t,i){var d=document.createElement('div');d.className='ex'+(st[i]?' done':'');d.innerHTML='<span class="cb">'+(st[i]?'✓':'')+'</span>'+t;d.addEventListener('click',function(){st[i]=st[i]?0:1;sj(key,st);d.classList.toggle('done',!!st[i]);d.querySelector('.cb').textContent=st[i]?'✓':'';});box.appendChild(d);});}
-  var exk='ex_'+today.toISOString().slice(0,10);
-  buildEx(exExpress,'#exExpress',exk+'_e');buildEx(exComplete,'#exComplete',exk+'_c');
+  buildEx(exExpress,'#exExpress','ex_'+iso+'_e');buildEx(exComplete,'#exComplete','ex_'+iso+'_c');
 
   var tInt=null,tLeft=0;
   window.startTimer=function(s){clearInterval(tInt);tLeft=s;upT();tInt=setInterval(function(){tLeft--;upT();if(tLeft<=0){clearInterval(tInt);if(navigator.vibrate)navigator.vibrate(400);$('#tdisp').textContent='✅ Go !';}},1000);};
@@ -330,82 +352,68 @@
 
   var rbox=$('#recipes');recipes.forEach(function(r){var d=document.createElement('details');d.innerHTML='<summary>'+r[0]+'</summary><div style="font-size:13px;margin-top:6px;color:#5a2a08">'+r[1]+'</div>';rbox.appendChild(d);});
 
+  $('#menuBtn').addEventListener('click',function(){var pool=menuPool.slice();for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+    var jrs=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];var h='';for(var k=0;k<7;k++){h+='<b>'+jrs[k]+'</b> : '+pool[k]+'<br>';}$('#menuOut').innerHTML=h;$('#menuOut').style.display='block';});
+
   var shk='shop_'+wkey(),sst=gj(shk,{}),sbox=$('#shop');
   shopItems.forEach(function(t,i){var d=document.createElement('div');d.className='shop'+(sst[i]?' done':'');d.innerHTML='<span class="cb">'+(sst[i]?'✓':'')+'</span>'+t;d.addEventListener('click',function(){sst[i]=sst[i]?0:1;sj(shk,sst);d.classList.toggle('done',!!sst[i]);d.querySelector('.cb').textContent=sst[i]?'✓':'';});sbox.appendChild(d);});
 
   var pmk='pea_'+today.getFullYear()+'_'+today.getMonth();
-  function rpea(){$('#peaState').textContent=LG(pmk)?'✅ Investi ce mois — bravo !':'';
-    var h='',M=['jan','fév','mar','avr','mai','jui','juil','aoû','sep','oct','nov','déc'];for(var k=5;k>=0;k--){var d=new Date(today.getFullYear(),today.getMonth()-k,1);h+=(LG('pea_'+d.getFullYear()+'_'+d.getMonth())?'🟢':'⚪')+' '+M[d.getMonth()]+'   ';}$('#peaHist').textContent=h;}
+  function rpea(){$('#peaState').textContent=LG(pmk)?'✅ Investi ce mois — bravo !':'';var h='',M=['jan','fév','mar','avr','mai','jui','juil','aoû','sep','oct','nov','déc'];for(var k=5;k>=0;k--){var d=new Date(today.getFullYear(),today.getMonth()-k,1);h+=(LG('pea_'+d.getFullYear()+'_'+d.getMonth())?'🟢':'⚪')+' '+M[d.getMonth()]+'   ';}$('#peaHist').textContent=h;}
   $('#peaBtn').addEventListener('click',function(){if(LG(pmk))LR(pmk);else LS(pmk,'1');rpea();});rpea();
 
-  var mk='mood_'+today.toISOString().slice(0,10);
+  var mk='mood_'+iso;
   function rmood(){var v=LG(mk);document.querySelectorAll('#mood span').forEach(function(s){s.classList.toggle('sel',s.getAttribute('data-m')===v)});$('#moodTxt').textContent=v?'Noté pour aujourd\'hui 💛':'';}
   $('#mood').addEventListener('click',function(e){var s=e.target.closest('span');if(!s)return;LS(mk,s.getAttribute('data-m'));rmood();});rmood();
 
   var bOn=false,bInt=null;
-  $('#breathBtn').addEventListener('click',function(){var c=$('#breath');if(bOn){bOn=false;clearInterval(bInt);c.classList.remove('in');c.textContent='Prête ?';this.textContent='Démarrer';return;}
-    bOn=true;this.textContent='Stop';function cyc(){c.classList.add('in');c.textContent='Inspire…';setTimeout(function(){if(!bOn)return;c.classList.remove('in');c.textContent='Expire…';},4000);}cyc();bInt=setInterval(cyc,8000);});
+  $('#breathBtn').addEventListener('click',function(){var c=$('#breath');if(bOn){bOn=false;clearInterval(bInt);c.classList.remove('in');c.textContent='Prête ?';this.textContent='Démarrer';return;}bOn=true;this.textContent='Stop';function cyc(){c.classList.add('in');c.textContent='Inspire…';setTimeout(function(){if(!bOn)return;c.classList.remove('in');c.textContent='Expire…';},4000);}cyc();bInt=setInterval(cyc,8000);});
+
+  var grk='grat_'+iso;try{$('#grat').value=LG(grk)||''}catch(e){}
+  $('#grat').addEventListener('input',function(){LS(grk,this.value);$('#gratMsg').textContent='Enregistré 💛';});
+  var jrk='jrn_'+iso;try{$('#jrn').value=LG(jrk)||''}catch(e){}
+  $('#jrn').addEventListener('input',function(){LS(jrk,this.value);$('#jrnMsg').textContent='Enregistré 📔';});
+
+  var lk='lang_'+iso,lv=gj(lk,{en:0,es:0}),lbox=$('#langs');
+  [['en','🇬🇧 Anglais 10 min'],['es','🇪🇸 Espagnol 10 min']].forEach(function(p){var d=document.createElement('div');d.className='ex'+(lv[p[0]]?' done':'');d.innerHTML='<span class="cb">'+(lv[p[0]]?'✓':'')+'</span>'+p[1];d.addEventListener('click',function(){lv[p[0]]=lv[p[0]]?0:1;sj(lk,lv);d.classList.toggle('done',!!lv[p[0]]);d.querySelector('.cb').textContent=lv[p[0]]?'✓':'';updateLevel();});lbox.appendChild(d);});
+
+  function rwl(){var l=gj('weights',[]);if(!l.length){$('#wList').textContent='Aucune mesure encore.';$('#wSpark').innerHTML='';return;}
+    var h='';for(var i=0;i<Math.min(6,l.length);i++){var c=l[i],ar='';if(i<l.length-1){var df=c.kg-l[i+1].kg;ar=df>0?' 🔺':(df<0?' 🔻':' ▪');}h+=c.d+' : '+c.kg+' kg'+ar+'<br>';}$('#wList').innerHTML=h;
+    var pts=l.slice(0,12).reverse().map(function(x){return x.kg});if(pts.length>1){var mn=Math.min.apply(null,pts),mx=Math.max.apply(null,pts),rng=(mx-mn)||1,W=300,H=50;var d='';pts.forEach(function(v,i){var x=i/(pts.length-1)*W,y=H-((v-mn)/rng)*H;d+=(i?'L':'M')+x.toFixed(0)+','+y.toFixed(0)+' ';});$('#wSpark').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" style="width:100%;height:50px"><polyline fill="none" stroke="#6f42c1" stroke-width="3" points="'+d.replace(/[ML]/g,'').trim()+'"/></svg>';}else{$('#wSpark').innerHTML='';}}
+  $('#wBtn').addEventListener('click',function(){var v=parseFloat($('#wIn').value);if(!v)return;var l=gj('weights',[]);l.unshift({d:iso.slice(5),kg:v});sj('weights',l.slice(0,40));$('#wIn').value='';rwl();});rwl();
+
+  $('#notifBtn').addEventListener('click',function(){if(!('Notification' in window)){$('#notifMsg').textContent='Notifications non supportées sur ce navigateur — utilise le calendrier.';return;}
+    Notification.requestPermission().then(function(p){if(p==='granted'){try{new Notification('Ma semaine 💛',{body:'Rappels activés ! Tu gères, continue 💪'});}catch(e){}$('#notifMsg').textContent='Rappels activés ✅ (fonctionnent quand l\'app est ouverte ; le calendrier reste le plus fiable).';}else{$('#notifMsg').textContent='Rappels refusés — pas de souci, le calendrier fait le job.';}});});
 
   function evRender(){var l=gj('myEvents',[]);$('#evList').innerHTML=l.length?l.map(function(e){return '• '+e}).join('<br>'):'Aucun pour l\'instant.';}
   evRender();
-  $('#evBtn').addEventListener('click',function(){
-    var t=$('#evTitle').value.trim(),w=$('#evWith').value.trim(),lo=$('#evLoc').value.trim(),d=$('#evDate').value,st0=$('#evStart').value,en=$('#evEnd').value||st0;
+  $('#evBtn').addEventListener('click',function(){var t=$('#evTitle').value.trim(),w=$('#evWith').value.trim(),lo=$('#evLoc').value.trim(),d=$('#evDate').value,st0=$('#evStart').value,en=$('#evEnd').value||st0;
     if(!t||!d||!st0){$('#evMsg').textContent='Remplis au moins l\'activité, la date et l\'heure 🙏';return;}
-    var sum=t+(w?' avec '+w:'');var dt=d.replace(/-/g,'');var st=dt+'T'+st0.replace(':','')+'00',et=dt+'T'+en.replace(':','')+'00';
-    var rep=$('#evRep').value,al=$('#evAlarm').value;
+    var sum=t+(w?' avec '+w:'');var dtp=d.replace(/-/g,'');var st=dtp+'T'+st0.replace(':','')+'00',et=dtp+'T'+en.replace(':','')+'00';var rep=$('#evRep').value,al=$('#evAlarm').value;
     var v=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Ma semaine//FR','BEGIN:VEVENT','UID:'+(+today+Math.floor(performance.now()))+'@masemaine','SUMMARY:'+sum];
-    if(lo)v.push('LOCATION:'+lo);if(w)v.push('DESCRIPTION:Avec '+w);
-    v.push('DTSTART:'+st,'DTEND:'+et);if(rep)v.push('RRULE:FREQ='+rep);
-    v.push('BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+sum,'TRIGGER:'+al,'END:VALARM','END:VEVENT','END:VCALENDAR');
-    var blob=new Blob([v.join('\r\n')],{type:'text/calendar'});var url=URL.createObjectURL(blob);
-    var a=document.createElement('a');a.href=url;a.download=(t.replace(/[^a-z0-9]/gi,'-')||'evenement')+'.ics';document.body.appendChild(a);a.click();
-    setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);
-    var lbl=sum+' — '+d+' '+st0;var l=gj('myEvents',[]);l.unshift(lbl);sj('myEvents',l.slice(0,20));evRender();
-    $('#evMsg').textContent='Événement créé ✅ (ouvre le fichier pour l\'ajouter)';$('#evTitle').value='';$('#evWith').value='';$('#evLoc').value='';
-  });
+    if(lo)v.push('LOCATION:'+lo);if(w)v.push('DESCRIPTION:Avec '+w);v.push('DTSTART:'+st,'DTEND:'+et);if(rep)v.push('RRULE:FREQ='+rep);v.push('BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+sum,'TRIGGER:'+al,'END:VALARM','END:VEVENT','END:VCALENDAR');
+    var blob=new Blob([v.join('\r\n')],{type:'text/calendar'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=(t.replace(/[^a-z0-9]/gi,'-')||'evenement')+'.ics';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);
+    var l=gj('myEvents',[]);l.unshift(sum+' — '+d+' '+st0);sj('myEvents',l.slice(0,20));evRender();$('#evMsg').textContent='Événement créé ✅';$('#evTitle').value='';$('#evWith').value='';$('#evLoc').value='';});
 
-  // ---- protéines ----
-  var pk2='prot_'+today.toISOString().slice(0,10),pv=gj(pk2,0),pbox=$('#prot');
-  for(var pi=0;pi<4;pi++){var ps=document.createElement('span');ps.textContent='🥩';ps.setAttribute('data-i',pi);pbox.appendChild(ps);}
-  function rprot(){pbox.querySelectorAll('span').forEach(function(s,i){s.classList.toggle('full',i<pv)});$('#protTxt').textContent=pv+'/4 portions'+(pv>=4?' 💪':'');}
-  pbox.addEventListener('click',function(e){var s=e.target.closest('span');if(!s)return;var i=+s.getAttribute('data-i');pv=(i+1===pv)?i:i+1;sj(pk2,pv);rprot();});rprot();
-
-  // ---- objectifs du mois ----
   var gk='goals_'+today.getFullYear()+'_'+today.getMonth(),gv=gj(gk,[{t:'',d:0},{t:'',d:0},{t:'',d:0}]),gbox=$('#goals');
   gv.forEach(function(g,i){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px;margin:5px 0';
     var cb=document.createElement('span');cb.style.cssText='width:20px;height:20px;border:2px solid #cbb5ec;border-radius:5px;text-align:center;line-height:18px;color:#fff;cursor:pointer;flex:0 0 auto';
     function paint(){if(g.d){cb.style.background='#1f9d55';cb.style.borderColor='#1f9d55';cb.textContent='✓';}else{cb.style.background='';cb.style.borderColor='#cbb5ec';cb.textContent='';}}paint();
     var inp=document.createElement('input');inp.value=g.t;inp.placeholder='Objectif '+(i+1)+'…';inp.style.flex='1';
-    cb.addEventListener('click',function(){g.d=g.d?0:1;sj(gk,gv);paint();});
-    inp.addEventListener('input',function(){g.t=inp.value;sj(gk,gv);});
+    cb.addEventListener('click',function(){g.d=g.d?0:1;sj(gk,gv);paint();});inp.addEventListener('input',function(){g.t=inp.value;sj(gk,gv);});
     row.appendChild(cb);row.appendChild(inp);gbox.appendChild(row);});
 
-  // ---- stats + badges ----
   function allTrk(){var tot=0,best=0;try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('trk_')===0){var a=JSON.parse(localStorage.getItem(k))||[];var n=a.reduce(function(x,y){return x+(y?1:0)},0);tot+=n;if(n>best)best=n;}}}catch(e){}return{tot:tot,best:best};}
-  var stt=allTrk();
-  $('#stats').innerHTML='🏋️ '+stt.tot+' jours actifs au total<br>🔝 Meilleure semaine : '+stt.best+'/7';
-  var bdg=[];if(ts.reduce(function(a,b){return a+(b?1:0)},0)>=5)bdg.push('🔥');if(wv>=8)bdg.push('💧');if(stt.tot>=10)bdg.push('🏋️');if(LG(mk))bdg.push('😊');
-  $('#badges').textContent=bdg.length?bdg.join('  '):'À débloquer cette semaine !';
+  function updateLevel(){var n=ts.reduce(function(a,b){return a+(b?1:0)},0);var pts=n*10+(wv>=waterGoal?5:0)+(pv>=protGoal?5:0)+((typeof lv!=='undefined'&&lv&&lv.en)?5:0)+((typeof lv!=='undefined'&&lv&&lv.es)?5:0)+(LG(grk)?5:0);var lvl=Math.floor(pts/40)+1;$('#levelCard').innerHTML='<b>Niveau '+lvl+'</b> · '+pts+' pts cette semaine 🌟';
+    var stt=allTrk();$('#stats').innerHTML='🏋️ '+stt.tot+' jours actifs au total<br>🔝 Meilleure semaine : '+stt.best+'/7<br>🇪🇸 Quiz réussis : '+(LG('quizScore')||0);
+    var bdg=[];if(n>=sessGoal)bdg.push('🔥');if(wv>=waterGoal)bdg.push('💧');if(stt.tot>=10)bdg.push('🏋️');if(LG(mk))bdg.push('😊');if((LG('quizScore')||0)>=5)bdg.push('🇪🇸');$('#badges').textContent=bdg.length?bdg.join('  '):'À débloquer cette semaine !';}
+  updateLevel();
 
-  // ---- gratitude ----
-  var grk='grat_'+today.toISOString().slice(0,10);try{$('#grat').value=localStorage.getItem(grk)||'';}catch(e){}
-  $('#grat').addEventListener('input',function(){localStorage.setItem(grk,this.value);$('#gratMsg').textContent='Enregistré 💛';});
-
-  // ---- langues du jour ----
-  var lk='lang_'+today.toISOString().slice(0,10),lv=gj(lk,{en:0,es:0}),lbox=$('#langs');
-  [['en','🇬🇧 Anglais 10 min'],['es','🇪🇸 Espagnol 10 min']].forEach(function(p){var d=document.createElement('div');d.className='ex'+(lv[p[0]]?' done':'');d.innerHTML='<span class="cb">'+(lv[p[0]]?'✓':'')+'</span>'+p[1];d.addEventListener('click',function(){lv[p[0]]=lv[p[0]]?0:1;sj(lk,lv);d.classList.toggle('done',!!lv[p[0]]);d.querySelector('.cb').textContent=lv[p[0]]?'✓':'';});lbox.appendChild(d);});
-
-  // ---- poids ----
-  function rwl(){var l=gj('weights',[]);if(!l.length){$('#wList').textContent='Aucune mesure encore.';return;}var h='';for(var i=0;i<Math.min(6,l.length);i++){var c=l[i],ar='';if(i<l.length-1){var df=c.kg-l[i+1].kg;ar=df>0?' 🔺':(df<0?' 🔻':' ▪');}h+=c.d+' : '+c.kg+' kg'+ar+'<br>';}$('#wList').innerHTML=h;}
-  $('#wBtn').addEventListener('click',function(){var v=parseFloat($('#wIn').value);if(!v)return;var l=gj('weights',[]);l.unshift({d:today.toISOString().slice(5,10),kg:v});sj('weights',l.slice(0,30));$('#wIn').value='';rwl();});rwl();
-
-  // ---- candidatures ----
   var JST=[['À postuler','#888'],['Envoyé','#1a5fb4'],['Entretien','#b8860b'],['Réponse','#1f9d55']];
-  function rjob(){var l=gj('jobApps',[]);if(!l.length){$('#jList').innerHTML='<span class="note">Ajoute tes candidatures pour les suivre.</span>';return;}
-    $('#jList').innerHTML='';l.forEach(function(j,idx){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #eee;font-size:13px';
+  function rjob(){var l=gj('jobApps',[]);if(!l.length){$('#jList').innerHTML='<span class="note">Ajoute tes candidatures pour les suivre.</span>';return;}$('#jList').innerHTML='';
+    l.forEach(function(j,idx){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #eee;font-size:13px';
       var txt=document.createElement('div');txt.style.flex='1';txt.innerHTML='<b>'+j.c+'</b>'+(j.r?' — '+j.r:'');
-      var st=document.createElement('span');st.className='pill';st.style.cssText='background:'+JST[j.s][1]+';color:#fff;cursor:pointer';st.textContent=JST[j.s][0];
-      st.addEventListener('click',function(){j.s=(j.s+1)%JST.length;sj('jobApps',l);rjob();});
+      var st=document.createElement('span');st.className='pill';st.style.cssText='background:'+JST[j.s][1]+';color:#fff;cursor:pointer';st.textContent=JST[j.s][0];st.addEventListener('click',function(){j.s=(j.s+1)%JST.length;sj('jobApps',l);rjob();});
       var del=document.createElement('span');del.textContent='✕';del.style.cssText='color:#c0398b;cursor:pointer;padding:0 4px';del.addEventListener('click',function(){l.splice(idx,1);sj('jobApps',l);rjob();});
       row.appendChild(txt);row.appendChild(st);row.appendChild(del);$('#jList').appendChild(row);});}
   $('#jBtn').addEventListener('click',function(){var c=$('#jc').value.trim(),r=$('#jr').value.trim();if(!c)return;var l=gj('jobApps',[]);l.unshift({c:c,r:r,s:0});sj('jobApps',l);$('#jc').value='';$('#jr').value='';rjob();});rjob();
