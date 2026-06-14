@@ -100,6 +100,15 @@
     <h3>💧 Mon eau du jour</h3>
     <div class="water" id="water"></div>
     <div class="note" id="waterTxt">Objectif : 8 verres</div>
+
+    <h3>🎯 Objectifs du mois</h3>
+    <div class="card" id="goals"></div>
+
+    <h3>🏅 Mes badges</h3>
+    <div class="card" id="badges" style="font-size:22px">—</div>
+
+    <h3>📊 Mes stats</h3>
+    <div class="card" id="stats" style="font-size:13px"></div>
   </div>
 
   <!-- SPORT -->
@@ -137,6 +146,9 @@
     <h3>5 idées du soir <span class="note">(tape pour la recette)</span></h3>
     <div id="recipes"></div>
     <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b style="color:#c0392b">💡 Protéines à CHAQUE repas</b><br>œufs · poulet · poisson · lentilles · pois chiches · skyr · tofu. <span class="note">(tu oublies souvent 😉)</span></div>
+    <h3>🥩 Mes protéines du jour</h3>
+    <div class="water" id="prot"></div>
+    <div class="note" id="protTxt">Objectif : 4 portions</div>
     <h3>🛒 Liste de courses Lidl <span class="note">(coche)</span></h3>
     <div class="card" id="shop"></div>
   </div>
@@ -164,6 +176,15 @@
       <div class="breath" id="breath">Prête ?</div>
       <button class="btn pink" id="breathBtn" style="max-width:200px;margin:0 auto">Démarrer</button>
     </div>
+    <h3>🙏 Gratitude du jour</h3>
+    <div class="card"><textarea id="grat" rows="2" style="width:100%;border:1px solid #ddd;border-radius:9px;padding:8px;font-family:inherit;font-size:14px" placeholder="Une chose pour laquelle tu es reconnaissante aujourd'hui…"></textarea><div class="note" id="gratMsg"></div></div>
+
+    <h3>🌍 Mes langues aujourd'hui</h3>
+    <div class="card" id="langs"></div>
+
+    <h3>⚖️ Mon poids</h3>
+    <div class="card"><div style="display:flex;gap:8px"><input id="wIn" type="number" step="0.1" placeholder="kg" style="flex:1"><button class="btn" id="wBtn" style="width:auto;margin:0;padding:10px 16px">Ajouter</button></div><div id="wList" style="font-size:13px;margin-top:8px;color:#555"></div></div>
+
     <h3>Anti-flemme</h3>
     <div class="card" style="background:#fdf3f9;border-color:#f5cce6">
       • <b>Règle des 5 min</b> : « juste 5 min », et tu finis presque toujours.<br>
@@ -211,6 +232,13 @@
     <div class="card"><b>1. Bruxelles/UE</b> — <a href="https://ecre.org/news/news/vacancies/">ECRE</a> · <a href="https://picum.org/join-us/">PICUM</a><br><b>2. DPO/RGPD</b> (télétravail) — <a href="https://remotefr.com/competences/juridique">postes</a> · <a href="https://www.cnil.fr/fr/la-certification-des-competences-du-delegue-la-protection-des-donnees">certif</a><br><b>3. Canada</b> — <a href="https://admission.umontreal.ca/programmes/dess-en-reglementation-canadienne-et-quebecoise-de-limmigration/">DESS Montréal</a><br><b>Chantier :</b> anglais B2 → C1</div>
     <h3>🔎 Boards</h3>
     <div class="card" style="font-size:13px"><a href="https://choisirleservicepublic.gouv.fr/">Service public</a> · <a href="https://careers.un.org/">UN Careers</a> · <a href="https://www.impactpool.org/search/human%20rights">Impactpool</a> · <a href="https://jobs.humanrightscareers.com/">Human Rights Careers</a> · <a href="https://fr.indeed.com/q-juriste-droit-des-%C3%89trangers-t%C3%A9l%C3%A9travail-emplois.html">Indeed télétravail</a></div>
+    <h3>📋 Mes candidatures</h3>
+    <div class="card">
+      <div style="display:flex;gap:6px"><input id="jc" placeholder="Entreprise" style="flex:1"><input id="jr" placeholder="Poste" style="flex:1"></div>
+      <button class="btn" id="jBtn" style="margin-top:8px">+ Ajouter</button>
+      <div id="jList" style="margin-top:8px"></div>
+      <div class="note">Tape le statut pour le faire avancer (À postuler → Envoyé → Entretien → Réponse).</div>
+    </div>
   </div>
 
   <!-- NOUS -->
@@ -241,7 +269,10 @@
 (function(){
   var $=function(s){return document.querySelector(s)};
   function gj(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch(e){return d}}
-  function sj(k,v){localStorage.setItem(k,JSON.stringify(v))}
+  function sj(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  function LG(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function LS(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function LR(k){try{localStorage.removeItem(k)}catch(e){}}
   var today=new Date(); var di=(today.getDay()+6)%7;
   var dn=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
@@ -303,13 +334,13 @@
   shopItems.forEach(function(t,i){var d=document.createElement('div');d.className='shop'+(sst[i]?' done':'');d.innerHTML='<span class="cb">'+(sst[i]?'✓':'')+'</span>'+t;d.addEventListener('click',function(){sst[i]=sst[i]?0:1;sj(shk,sst);d.classList.toggle('done',!!sst[i]);d.querySelector('.cb').textContent=sst[i]?'✓':'';});sbox.appendChild(d);});
 
   var pmk='pea_'+today.getFullYear()+'_'+today.getMonth();
-  function rpea(){$('#peaState').textContent=localStorage.getItem(pmk)?'✅ Investi ce mois — bravo !':'';
-    var h='',M=['jan','fév','mar','avr','mai','jui','juil','aoû','sep','oct','nov','déc'];for(var k=5;k>=0;k--){var d=new Date(today.getFullYear(),today.getMonth()-k,1);h+=(localStorage.getItem('pea_'+d.getFullYear()+'_'+d.getMonth())?'🟢':'⚪')+' '+M[d.getMonth()]+'   ';}$('#peaHist').textContent=h;}
-  $('#peaBtn').addEventListener('click',function(){if(localStorage.getItem(pmk))localStorage.removeItem(pmk);else localStorage.setItem(pmk,'1');rpea();});rpea();
+  function rpea(){$('#peaState').textContent=LG(pmk)?'✅ Investi ce mois — bravo !':'';
+    var h='',M=['jan','fév','mar','avr','mai','jui','juil','aoû','sep','oct','nov','déc'];for(var k=5;k>=0;k--){var d=new Date(today.getFullYear(),today.getMonth()-k,1);h+=(LG('pea_'+d.getFullYear()+'_'+d.getMonth())?'🟢':'⚪')+' '+M[d.getMonth()]+'   ';}$('#peaHist').textContent=h;}
+  $('#peaBtn').addEventListener('click',function(){if(LG(pmk))LR(pmk);else LS(pmk,'1');rpea();});rpea();
 
   var mk='mood_'+today.toISOString().slice(0,10);
-  function rmood(){var v=localStorage.getItem(mk);document.querySelectorAll('#mood span').forEach(function(s){s.classList.toggle('sel',s.getAttribute('data-m')===v)});$('#moodTxt').textContent=v?'Noté pour aujourd\'hui 💛':'';}
-  $('#mood').addEventListener('click',function(e){var s=e.target.closest('span');if(!s)return;localStorage.setItem(mk,s.getAttribute('data-m'));rmood();});rmood();
+  function rmood(){var v=LG(mk);document.querySelectorAll('#mood span').forEach(function(s){s.classList.toggle('sel',s.getAttribute('data-m')===v)});$('#moodTxt').textContent=v?'Noté pour aujourd\'hui 💛':'';}
+  $('#mood').addEventListener('click',function(e){var s=e.target.closest('span');if(!s)return;LS(mk,s.getAttribute('data-m'));rmood();});rmood();
 
   var bOn=false,bInt=null;
   $('#breathBtn').addEventListener('click',function(){var c=$('#breath');if(bOn){bOn=false;clearInterval(bInt);c.classList.remove('in');c.textContent='Prête ?';this.textContent='Démarrer';return;}
@@ -332,6 +363,52 @@
     var lbl=sum+' — '+d+' '+st0;var l=gj('myEvents',[]);l.unshift(lbl);sj('myEvents',l.slice(0,20));evRender();
     $('#evMsg').textContent='Événement créé ✅ (ouvre le fichier pour l\'ajouter)';$('#evTitle').value='';$('#evWith').value='';$('#evLoc').value='';
   });
+
+  // ---- protéines ----
+  var pk2='prot_'+today.toISOString().slice(0,10),pv=gj(pk2,0),pbox=$('#prot');
+  for(var pi=0;pi<4;pi++){var ps=document.createElement('span');ps.textContent='🥩';ps.setAttribute('data-i',pi);pbox.appendChild(ps);}
+  function rprot(){pbox.querySelectorAll('span').forEach(function(s,i){s.classList.toggle('full',i<pv)});$('#protTxt').textContent=pv+'/4 portions'+(pv>=4?' 💪':'');}
+  pbox.addEventListener('click',function(e){var s=e.target.closest('span');if(!s)return;var i=+s.getAttribute('data-i');pv=(i+1===pv)?i:i+1;sj(pk2,pv);rprot();});rprot();
+
+  // ---- objectifs du mois ----
+  var gk='goals_'+today.getFullYear()+'_'+today.getMonth(),gv=gj(gk,[{t:'',d:0},{t:'',d:0},{t:'',d:0}]),gbox=$('#goals');
+  gv.forEach(function(g,i){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px;margin:5px 0';
+    var cb=document.createElement('span');cb.style.cssText='width:20px;height:20px;border:2px solid #cbb5ec;border-radius:5px;text-align:center;line-height:18px;color:#fff;cursor:pointer;flex:0 0 auto';
+    function paint(){if(g.d){cb.style.background='#1f9d55';cb.style.borderColor='#1f9d55';cb.textContent='✓';}else{cb.style.background='';cb.style.borderColor='#cbb5ec';cb.textContent='';}}paint();
+    var inp=document.createElement('input');inp.value=g.t;inp.placeholder='Objectif '+(i+1)+'…';inp.style.flex='1';
+    cb.addEventListener('click',function(){g.d=g.d?0:1;sj(gk,gv);paint();});
+    inp.addEventListener('input',function(){g.t=inp.value;sj(gk,gv);});
+    row.appendChild(cb);row.appendChild(inp);gbox.appendChild(row);});
+
+  // ---- stats + badges ----
+  function allTrk(){var tot=0,best=0;try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('trk_')===0){var a=JSON.parse(localStorage.getItem(k))||[];var n=a.reduce(function(x,y){return x+(y?1:0)},0);tot+=n;if(n>best)best=n;}}}catch(e){}return{tot:tot,best:best};}
+  var stt=allTrk();
+  $('#stats').innerHTML='🏋️ '+stt.tot+' jours actifs au total<br>🔝 Meilleure semaine : '+stt.best+'/7';
+  var bdg=[];if(ts.reduce(function(a,b){return a+(b?1:0)},0)>=5)bdg.push('🔥');if(wv>=8)bdg.push('💧');if(stt.tot>=10)bdg.push('🏋️');if(LG(mk))bdg.push('😊');
+  $('#badges').textContent=bdg.length?bdg.join('  '):'À débloquer cette semaine !';
+
+  // ---- gratitude ----
+  var grk='grat_'+today.toISOString().slice(0,10);try{$('#grat').value=localStorage.getItem(grk)||'';}catch(e){}
+  $('#grat').addEventListener('input',function(){localStorage.setItem(grk,this.value);$('#gratMsg').textContent='Enregistré 💛';});
+
+  // ---- langues du jour ----
+  var lk='lang_'+today.toISOString().slice(0,10),lv=gj(lk,{en:0,es:0}),lbox=$('#langs');
+  [['en','🇬🇧 Anglais 10 min'],['es','🇪🇸 Espagnol 10 min']].forEach(function(p){var d=document.createElement('div');d.className='ex'+(lv[p[0]]?' done':'');d.innerHTML='<span class="cb">'+(lv[p[0]]?'✓':'')+'</span>'+p[1];d.addEventListener('click',function(){lv[p[0]]=lv[p[0]]?0:1;sj(lk,lv);d.classList.toggle('done',!!lv[p[0]]);d.querySelector('.cb').textContent=lv[p[0]]?'✓':'';});lbox.appendChild(d);});
+
+  // ---- poids ----
+  function rwl(){var l=gj('weights',[]);if(!l.length){$('#wList').textContent='Aucune mesure encore.';return;}var h='';for(var i=0;i<Math.min(6,l.length);i++){var c=l[i],ar='';if(i<l.length-1){var df=c.kg-l[i+1].kg;ar=df>0?' 🔺':(df<0?' 🔻':' ▪');}h+=c.d+' : '+c.kg+' kg'+ar+'<br>';}$('#wList').innerHTML=h;}
+  $('#wBtn').addEventListener('click',function(){var v=parseFloat($('#wIn').value);if(!v)return;var l=gj('weights',[]);l.unshift({d:today.toISOString().slice(5,10),kg:v});sj('weights',l.slice(0,30));$('#wIn').value='';rwl();});rwl();
+
+  // ---- candidatures ----
+  var JST=[['À postuler','#888'],['Envoyé','#1a5fb4'],['Entretien','#b8860b'],['Réponse','#1f9d55']];
+  function rjob(){var l=gj('jobApps',[]);if(!l.length){$('#jList').innerHTML='<span class="note">Ajoute tes candidatures pour les suivre.</span>';return;}
+    $('#jList').innerHTML='';l.forEach(function(j,idx){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #eee;font-size:13px';
+      var txt=document.createElement('div');txt.style.flex='1';txt.innerHTML='<b>'+j.c+'</b>'+(j.r?' — '+j.r:'');
+      var st=document.createElement('span');st.className='pill';st.style.cssText='background:'+JST[j.s][1]+';color:#fff;cursor:pointer';st.textContent=JST[j.s][0];
+      st.addEventListener('click',function(){j.s=(j.s+1)%JST.length;sj('jobApps',l);rjob();});
+      var del=document.createElement('span');del.textContent='✕';del.style.cssText='color:#c0398b;cursor:pointer;padding:0 4px';del.addEventListener('click',function(){l.splice(idx,1);sj('jobApps',l);rjob();});
+      row.appendChild(txt);row.appendChild(st);row.appendChild(del);$('#jList').appendChild(row);});}
+  $('#jBtn').addEventListener('click',function(){var c=$('#jc').value.trim(),r=$('#jr').value.trim();if(!c)return;var l=gj('jobApps',[]);l.unshift({c:c,r:r,s:0});sj('jobApps',l);$('#jc').value='';$('#jr').value='';rjob();});rjob();
 })();
 </script>
 </body>
