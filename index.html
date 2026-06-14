@@ -95,13 +95,16 @@
   <!-- ACCUEIL -->
   <div class="sec on" id="t-accueil">
     <div class="card grad" id="levelCard" style="text-align:center"><b>Niveau 1</b> · 0 pt cette semaine</div>
+    <div class="note" id="openStreak" style="text-align:center;margin:-4px 0 8px"></div>
+    <div class="card" id="weatherCard" style="display:none"></div>
+    <div class="card" id="challengeCard" style="background:#eef9f0;border-color:#bfe6cd"></div>
     <div class="card grad"><b>Aujourd'hui</b> <span id="todayName"></span><div id="todayBox" style="margin-top:6px;font-size:14px"></div></div>
 
     <h3>🇪🇸 Quiz express d'espagnol</h3>
     <div class="card" id="quizCard"></div>
 
     <div class="card" style="background:#fffef5;border-color:#f0e6b8"><b>💬 Pensée du jour</b><div id="quote" style="font-style:italic;margin-top:3px"></div></div>
-    <div class="card es"><b>🇪🇸 Mot d'espagnol du jour</b><div id="esword" style="margin-top:3px;font-size:15px"></div></div>
+    <div class="card es"><b>🇪🇸 Mot d'espagnol du jour</b> <button onclick="window.__speakEs&&window.__speakEs()" style="background:rgba(255,255,255,.3);border:none;border-radius:8px;padding:2px 9px;cursor:pointer;font-size:14px">🔊</button><div id="esword" style="margin-top:3px;font-size:15px"></div></div>
 
     <h2>🗓️ En un coup d'œil</h2>
     <div class="recap"><div class="ic" style="background:#1f9d55">🏋️</div><div class="tx" style="background:#e8f6ee;color:#13351f"><b>Sport</b> — 2 muscu + 2 cardio + yoga</div></div>
@@ -231,11 +234,18 @@
     </div>
     <h3>📝 Mes événements créés</h3>
     <div class="card" id="evList" style="font-size:13px;color:#555">Aucun pour l'instant.</div>
+    <h3>🎂 Dates importantes</h3>
+    <div class="card">
+      <div style="display:flex;gap:6px"><input id="dLabel" placeholder="Ex : Anniv Maman" style="flex:2"><input id="dDate" type="date" style="flex:1"></div>
+      <button class="btn" id="dBtn" style="margin-top:8px">+ Ajouter</button>
+      <div id="dList" style="margin-top:8px;font-size:13px"></div>
+    </div>
   </div>
 
   <!-- JOB -->
   <div class="sec" id="t-job">
     <h2>💼 Job</h2>
+    <div class="card" id="jobCelebrate" style="display:none;background:#d8f5e3;border-color:#1f9d55;text-align:center;font-weight:700;color:#13351f"></div>
     <div class="card" style="border-color:#bfe6cd;background:#f6fff9"><span class="pill" style="background:#1f9d55;color:#fff">⭐ Pour quitter Paris</span><br><b>Rapporteur·e CNDA</b> — Bordeaux / Lyon / Nantes. Pile ton M2. <a href="https://www.cnda.fr/nous-rejoindre">voir</a></div>
     <div class="card"><b>Autres pistes :</b><br>• Officier de protection — OFPRA <a href="https://www.ofpra.gouv.fr/actualites/lofpra-recrute-des-officiers-de-protection-contractuels">voir</a><br>• Juriste — Défenseur des droits <a href="https://choisirleservicepublic.gouv.fr/">voir</a><br>• Programme Officer — EUAA <a href="https://www.euaa.europa.eu/careers/vacancies">voir</a></div>
     <h3>🧭 Tes 3 voies</h3>
@@ -257,6 +267,22 @@
     </div>
   </div>
 
+  <!-- PLUS -->
+  <div class="sec" id="t-plus">
+    <h2 style="color:#6f42c1;border-color:#6f42c1">⚙️ Plus</h2>
+    <h3>📤 Partager mes progrès avec Steve</h3>
+    <button class="btn pink" id="shareBtn">Partager / copier ma semaine</button>
+    <div class="note" id="shareMsg"></div>
+    <h3>💾 Sauvegarde de mes données</h3>
+    <button class="btn" id="expBtn">Exporter mes données</button>
+    <label class="btn green" style="cursor:pointer">Importer une sauvegarde<input id="impFile" type="file" accept="application/json" style="display:none"></label>
+    <div class="note" id="impMsg"></div>
+    <h3>🔄 Réinitialiser</h3>
+    <button class="btn" id="resetBtn" style="background:#c0398b">Tout remettre à zéro</button>
+    <div class="note">Efface tes coches, scores et réglages (irréversible).</div>
+    <div class="note" style="margin-top:18px;text-align:center">Fait avec 💛 par Steve</div>
+  </div>
+
 </div>
 
 <div class="tabbar" id="tabbar">
@@ -268,6 +294,7 @@
   <button data-t="agenda"><span class="e">📅</span>Agenda</button>
   <button data-t="job"><span class="e">💼</span>Job</button>
   <button data-t="love"><span class="e">💛</span>Nous</button>
+  <button data-t="plus"><span class="e">⚙️</span>Plus</button>
 </div>
 
 <script>
@@ -413,10 +440,53 @@
   function rjob(){var l=gj('jobApps',[]);if(!l.length){$('#jList').innerHTML='<span class="note">Ajoute tes candidatures pour les suivre.</span>';return;}$('#jList').innerHTML='';
     l.forEach(function(j,idx){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #eee;font-size:13px';
       var txt=document.createElement('div');txt.style.flex='1';txt.innerHTML='<b>'+j.c+'</b>'+(j.r?' — '+j.r:'');
-      var st=document.createElement('span');st.className='pill';st.style.cssText='background:'+JST[j.s][1]+';color:#fff;cursor:pointer';st.textContent=JST[j.s][0];st.addEventListener('click',function(){j.s=(j.s+1)%JST.length;sj('jobApps',l);rjob();});
-      var del=document.createElement('span');del.textContent='✕';del.style.cssText='color:#c0398b;cursor:pointer;padding:0 4px';del.addEventListener('click',function(){l.splice(idx,1);sj('jobApps',l);rjob();});
+      var st=document.createElement('span');st.className='pill';st.style.cssText='background:'+JST[j.s][1]+';color:#fff;cursor:pointer';st.textContent=JST[j.s][0];st.addEventListener('click',function(){j.s=(j.s+1)%JST.length;sj('jobApps',l);rjob();jobCele();});
+      var del=document.createElement('span');del.textContent='✕';del.style.cssText='color:#c0398b;cursor:pointer;padding:0 4px';del.addEventListener('click',function(){l.splice(idx,1);sj('jobApps',l);rjob();jobCele();});
       row.appendChild(txt);row.appendChild(st);row.appendChild(del);$('#jList').appendChild(row);});}
-  $('#jBtn').addEventListener('click',function(){var c=$('#jc').value.trim(),r=$('#jr').value.trim();if(!c)return;var l=gj('jobApps',[]);l.unshift({c:c,r:r,s:0});sj('jobApps',l);$('#jc').value='';$('#jr').value='';rjob();});rjob();
+  $('#jBtn').addEventListener('click',function(){var c=$('#jc').value.trim(),r=$('#jr').value.trim();if(!c)return;var l=gj('jobApps',[]);l.unshift({c:c,r:r,s:0});sj('jobApps',l);$('#jc').value='';$('#jr').value='';rjob();jobCele();});rjob();
+
+  // synthèse vocale espagnol
+  window.__speakEs=function(){try{var u=new SpeechSynthesisUtterance(es[doy%es.length][0]);u.lang='es-ES';speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}};
+
+  // streak de connexion
+  (function(){var last=LG('lastOpen'),sk=+(LG('openStreak')||0);var y=new Date(today);y.setDate(y.getDate()-1);var yiso=y.toISOString().slice(0,10);
+    if(last===iso){}else if(last===yiso){sk++;}else{sk=sk?1:1;}LS('lastOpen',iso);LS('openStreak',sk);
+    if(sk>1)$('#openStreak').textContent='🔥 '+sk+' jours d\'affilée sur l\'app';})();
+
+  // défi du mois
+  (function(){var goal=12,cnt=0;try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('trk_')===0){var ws=new Date(k.slice(4));if(ws.getMonth()===today.getMonth()&&ws.getFullYear()===today.getFullYear()){var a=JSON.parse(localStorage.getItem(k))||[];cnt+=a.reduce(function(x,y){return x+(y?1:0)},0);}}}}catch(e){}
+    var pct=Math.min(100,Math.round(cnt/goal*100));$('#challengeCard').innerHTML='<b>🏆 Défi du mois</b> : '+cnt+'/'+goal+' séances<div class="bar" style="margin-top:6px"><i style="width:'+pct+'%"></i></div>'+(cnt>=goal?'<div style="color:#1f9d55;font-weight:700;margin-top:4px">Défi relevé ! 🎉</div>':'');})();
+
+  // météo (open-meteo, sans clé)
+  (function(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(function(pos){
+    var la=pos.coords.latitude.toFixed(2),lo=pos.coords.longitude.toFixed(2);
+    fetch('https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&current=temperature_2m,weather_code&timezone=auto').then(function(r){return r.json()}).then(function(j){
+      var c=j.current||{};var code=c.weather_code,t=Math.round(c.temperature_2m);
+      var M={0:['☀️','Ciel dégagé'],1:['🌤️','Plutôt clair'],2:['⛅','Nuageux'],3:['☁️','Couvert'],45:['🌫️','Brouillard'],48:['🌫️','Brouillard'],51:['🌦️','Bruine'],53:['🌦️','Bruine'],61:['🌧️','Pluie'],63:['🌧️','Pluie'],65:['🌧️','Forte pluie'],71:['🌨️','Neige'],80:['🌦️','Averses'],81:['🌦️','Averses'],95:['⛈️','Orage']};
+      var w=M[code]||['🌡️',''];var tip=(code===0||code===1)?' — parfait pour ton cardio dehors !':((code>=61&&code<=82)?' — pluie : séance en salle 💪':'');
+      var el=$('#weatherCard');el.style.display='block';el.innerHTML='<b>'+w[0]+' '+t+'°C</b> '+w[1]+tip;
+    }).catch(function(){});
+  },function(){},{timeout:8000,maximumAge:3600000});})();
+
+  // dates importantes
+  function nextDays(ds){var p=ds.split('-');var m=+p[1]-1,day=+p[2];var t0=new Date(today.getFullYear(),today.getMonth(),today.getDate());var n=new Date(today.getFullYear(),m,day);if(n<t0)n=new Date(today.getFullYear()+1,m,day);return Math.round((n-t0)/864e5);}
+  function dRender(){var l=gj('dates',[]);if(!l.length){$('#dList').innerHTML='<span class="note">Aucune date.</span>';return;}
+    l.sort(function(a,b){return nextDays(a.d)-nextDays(b.d)});$('#dList').innerHTML=l.map(function(x,i){var nd=nextDays(x.d);return '🎂 <b>'+x.l+'</b> — '+(nd===0?'aujourd\'hui !':'dans '+nd+' j')+' <span data-i="'+i+'" class="dDel" style="color:#c0398b;cursor:pointer">✕</span>'}).join('<br>');
+    document.querySelectorAll('.dDel').forEach(function(e){e.addEventListener('click',function(){var l=gj('dates',[]);l.splice(+this.getAttribute('data-i'),1);sj('dates',l);dRender();});});}
+  $('#dBtn').addEventListener('click',function(){var l=$('#dLabel').value.trim(),d=$('#dDate').value;if(!l||!d)return;var a=gj('dates',[]);a.push({l:l,d:d});sj('dates',a);$('#dLabel').value='';dRender();});dRender();
+
+  // célébration job
+  function jobCele(){var l=gj('jobApps',[]);var rep=l.some(function(j){return j.s===3});var el=$('#jobCelebrate');if(rep){el.style.display='block';el.textContent='🎉 Tu as une réponse ! Tellement fière de toi 💛';}else{el.style.display='none';}}
+  jobCele();
+
+  // partager mes progrès
+  $('#shareBtn').addEventListener('click',function(){var n=ts.reduce(function(a,b){return a+(b?1:0)},0);var txt='Ma semaine 💪\n'+n+'/7 séances · '+wv+'/'+waterGoal+' verres d\'eau\nMot d\'espagnol : '+es[doy%es.length][0]+'\nJe pense à toi 💛';
+    if(navigator.share){navigator.share({text:txt}).catch(function(){});}else{try{navigator.clipboard.writeText(txt);$('#shareMsg').textContent='Copié ! Colle-le à Steve 💛';}catch(e){$('#shareMsg').textContent=txt;}}});
+
+  // export / import / reset
+  $('#expBtn').addEventListener('click',function(){var d={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);d[k]=localStorage.getItem(k);}var blob=new Blob([JSON.stringify(d)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='ma-semaine-sauvegarde.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);});
+  $('#impFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var d=JSON.parse(rd.result);Object.keys(d).forEach(function(k){LS(k,d[k]);});$('#impMsg').textContent='Importé ✅ rechargement…';setTimeout(function(){location.reload();},800);}catch(err){$('#impMsg').textContent='Fichier invalide.';}};rd.readAsText(f);});
+  $('#resetBtn').addEventListener('click',function(){if(confirm('Tout remettre à zéro ?')){try{localStorage.clear();}catch(e){}location.reload();}});
 })();
 </script>
 </body>
