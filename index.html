@@ -500,8 +500,11 @@
   $('#impFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var d=JSON.parse(rd.result);Object.keys(d).forEach(function(k){LS(k,d[k]);});$('#impMsg').textContent='Importé ✅ rechargement…';setTimeout(function(){location.reload();},800);}catch(err){$('#impMsg').textContent='Fichier invalide.';}};rd.readAsText(f);});
   $('#resetBtn').addEventListener('click',function(){if(confirm('Tout remettre à zéro ?')){try{localStorage.clear();}catch(e){}location.reload();}});
 
-  // PWA - hors-ligne
-  if('serviceWorker' in navigator){try{navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}}
+  // PWA - hors-ligne + mises à jour automatiques
+  if('serviceWorker' in navigator){try{
+    navigator.serviceWorker.register('sw.js').then(function(reg){try{reg.update()}catch(e){}});
+    var __refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(__refreshing)return;__refreshing=true;location.reload();});
+  }catch(e){}}
 
   // thèmes de couleur
   var THEMES=[['','#c0398b','Rose'],['th-ocean','#1a5fb4','Océan'],['th-foret','#1f9d55','Forêt'],['th-sunset','#e8590c','Sunset']];
