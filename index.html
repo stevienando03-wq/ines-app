@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ma semaine">
+<meta name="theme-color" content="#6f42c1">
+<title>Ma semaine — Inès</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f4f5f8;color:#222;line-height:1.5}
+  .app{max-width:460px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:74px}
+  .hdr{background:linear-gradient(135deg,#ff7eb3,#c0398b,#6f42c1);color:#fff;padding:16px 16px 14px;text-align:center}
+  .hdr img{width:74px;height:74px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.7);vertical-align:middle}
+  .hdr h1{font-size:20px;margin:8px 0 2px;font-weight:800}
+  .hdr .sub{font-size:12px;opacity:.95}
+  .sec{padding:14px 16px;display:none}
+  .sec.on{display:block}
+  h2{font-size:17px;color:#1a5fb4;border-bottom:2px solid #1a5fb4;padding-bottom:4px;margin:4px 0 12px}
+  h3{font-size:15px;margin:14px 0 6px}
+  .card{border:1px solid #e6e6ea;border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
+  .pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+  .recap{display:flex;align-items:center;border-radius:10px;overflow:hidden;margin-bottom:8px}
+  .recap .ic{width:46px;min-width:46px;text-align:center;font-size:20px;color:#fff;padding:12px 0;font-weight:800}
+  .recap .tx{padding:8px 12px;font-size:13px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  td{padding:7px;border-bottom:1px solid #eee;vertical-align:top}
+  .btn{display:block;width:100%;text-align:center;background:#6f42c1;color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;margin:10px 0;text-decoration:none;cursor:pointer}
+  .btn.green{background:#1f9d55}.btn.gold{background:#b8860b}
+  .day{display:flex;gap:6px;justify-content:space-between;margin:10px 0}
+  .day b{flex:1;text-align:center;border:2px solid #eadffb;border-radius:10px;padding:8px 0;font-size:13px;cursor:pointer;user-select:none;background:#faf7ff;color:#6f42c1}
+  .day b.done{background:#1f9d55;color:#fff;border-color:#1f9d55}
+  .streak{text-align:center;font-size:14px;color:#c0398b;font-weight:700;margin-top:4px}
+  a{color:#1a5fb4}
+  .note{font-size:12px;color:#888}
+  .tabbar{position:fixed;bottom:0;left:0;right:0;max-width:460px;margin:0 auto;background:#fff;border-top:1px solid #e6e6ea;display:flex;justify-content:space-around;padding:6px 0 8px}
+  .tabbar button{background:none;border:none;font-size:11px;color:#999;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;flex:1}
+  .tabbar button .e{font-size:19px}
+  .tabbar button.on{color:#6f42c1;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="hdr">
+    <img src="ines.jpg" alt="Inès">
+    <h1>Ma semaine 💛</h1>
+    <div class="sub">Sport · Repas · Argent · Motiv · Job — tout au même endroit</div>
+  </div>
+
+  <!-- ACCUEIL -->
+  <div class="sec on" id="t-accueil">
+    <div class="card" style="background:#faf3fb;border-color:#eccde9">
+      <b>Mon amour 💛</b> je t'aime et je pense fort à toi. Tout est là pour t'aider à avancer, à ton rythme. <span class="note">— Steve</span>
+    </div>
+
+    <h2>🗓️ En un coup d'œil</h2>
+    <div class="recap"><div class="ic" style="background:#1f9d55">🏋️</div><div class="tx" style="background:#e8f6ee;color:#13351f"><b>Sport</b> — Lun repos · Mar muscu express · Mer yoga · Jeu espagnol · Ven cardio · Sam muscu · Dim cardio long</div></div>
+    <div class="recap"><div class="ic" style="background:#e8590c">🍽️</div><div class="tx" style="background:#fdeede;color:#5a2a08"><b>Cuisine</b> — protéines à chaque repas · porridge overnight · légumes Lidl</div></div>
+    <div class="recap"><div class="ic" style="background:#b8860b">💰</div><div class="tx" style="background:#fdf6df;color:#5a4708"><b>Épargne</b> — mets sur ton PEA + passe l'ordre ETF !</div></div>
+    <div class="recap"><div class="ic" style="background:#c0398b">🔥</div><div class="tx" style="background:#fbe9f4;color:#5c1140"><b>Motiv</b> — règle des 5 min · prépare la veille · sois douce avec toi</div></div>
+    <div class="recap"><div class="ic" style="background:#1a5fb4">💼</div><div class="tx" style="background:#eaf1fb;color:#1c2b46"><b>Job</b> — CNDA/OFPRA (hors Paris) · Bruxelles · DPO · Canada · anglais → C1</div></div>
+
+    <h3>✅ Ma série de la semaine</h3>
+    <div class="day" id="tracker">
+      <b data-d="0">L</b><b data-d="1">M</b><b data-d="2">M</b><b data-d="3">J</b><b data-d="4">V</b><b data-d="5">S</b><b data-d="6">D</b>
+    </div>
+    <div class="streak" id="streak">Coche tes jours actifs 👆</div>
+
+    <a class="btn" id="calBtn" href="semaine-ines.ics" download="ma-semaine.ics">📅 Ajouter à mon calendrier iPhone</a>
+    <div class="note" style="text-align:center">Yoga, espagnol, séances sport & rappel PEA — avec notifications. À ouvrir sur ton iPhone (tape le bouton → « Tout ajouter »).</div>
+  </div>
+
+  <!-- SPORT -->
+  <div class="sec" id="t-sport">
+    <h2>🏋️ Sport</h2>
+    <table>
+      <tr style="background:#1a5fb4;color:#fff"><td>Jour</td><td>Séance</td></tr>
+      <tr><td><b>Lun</b></td><td>Repos actif (marche 30 min)</td></tr>
+      <tr><td><b>Mar</b></td><td>Muscu EXPRESS ~35 min</td></tr>
+      <tr><td><b>Mer</b></td><td>Yoga 19h-20h</td></tr>
+      <tr><td><b>Jeu</b></td><td>Espagnol 18h30-20h (+ cardio léger option)</td></tr>
+      <tr><td><b>Ven</b></td><td>Cardio 40 min</td></tr>
+      <tr><td><b>Sam</b></td><td>Muscu COMPLÈTE ~1h15 (avec Steve)</td></tr>
+      <tr><td><b>Dim</b></td><td>Cardio LONG 45-60 min + étirements</td></tr>
+    </table>
+    <h3 style="color:#1a5fb4">⚡ Muscu express (semaine)</h3>
+    <div class="card"><b>Supersets, repos 60 s :</b><br>A. Presse à cuisses + Leg curl — 3×12<br>B. Chest press + Tirage vertical — 3×12<br>C. Curl biceps + Extension triceps — 2×12<br>D. Gainage 3×40 s</div>
+    <h3 style="color:#1f9d55">💪 Muscu complète (week-end)</h3>
+    <div class="card">
+      <b>1. Jambes :</b> Presse 3×12 · Leg curl 3×12 · Abducteurs 3×15<br>
+      <b>2. Poussée :</b> Chest press 3×12 · Développé épaules 3×12<br>
+      <b>3. Tirage :</b> Tirage vertical 3×12 · Rowing 3×12<br>
+      <b>4. Bras :</b> Curl 3×12 · Triceps 3×12<br>
+      <b>5. Abdos :</b> Crunch/planche 3×15
+    </div>
+    <div class="note">🏃 Cardio long du dimanche = zone 2 (tu peux parler). Prendre du muscle = +1 peu de charge quand 12 reps deviennent faciles.</div>
+  </div>
+
+  <!-- REPAS -->
+  <div class="sec" id="t-repas">
+    <h2 style="color:#e8590c;border-color:#e8590c">🍽️ Repas</h2>
+    <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b>🥣 Petit-déj overnight</b><br>Flocons + yaourt grec + graines de chia + fruits. Préparé la veille, prêt le matin.</div>
+    <h3>5 idées du soir</h3>
+    <div class="card" style="background:#fff8f2;border-color:#ffe0c2">
+      • Poêlée courgettes-aubergines + poulet + boulgour<br>
+      • Ratatouille maison + œufs / feta<br>
+      • Dahl de lentilles + épinards + riz<br>
+      • Saumon + courgettes rôties + patate douce<br>
+      • Wok bœuf ou tofu + légumes + nouilles complètes
+    </div>
+    <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b style="color:#c0392b">💡 Protéines à CHAQUE repas</b><br>œufs · poulet · poisson · lentilles · pois chiches · skyr/yaourt grec · tofu. <span class="note">(tu oublies souvent 😉)</span></div>
+    <div class="note">🛒 Lidl : aubergines · courgettes · poivrons · épinards · fruits rouges · œufs · poulet · saumon · lentilles · pois chiches · yaourt grec · flocons · chia · boulgour.</div>
+  </div>
+
+  <!-- ARGENT -->
+  <div class="sec" id="t-argent">
+    <h2 style="color:#b8860b;border-color:#b8860b">💰 Argent</h2>
+    <div class="card" style="background:#fffdf0;border-color:#f0e0a8">
+      Pense à <b>mettre de l'argent sur ton PEA</b> ce mois-ci 💛 — et <b>SURTOUT à acheter ton ETF</b> derrière (virer ne suffit pas !). L'idéal : un <b>virement + investissement automatique</b>.
+    </div>
+    <button class="btn gold" id="peaBtn">Marquer « PEA investi ce mois » ✅</button>
+    <div class="streak" id="peaState" style="color:#b8860b"></div>
+    <div class="note">Un rappel mensuel est aussi dans ton calendrier.</div>
+  </div>
+
+  <!-- MOTIV -->
+  <div class="sec" id="t-motiv">
+    <h2 style="color:#c0398b;border-color:#c0398b">🔥 Motivation</h2>
+    <div class="card" style="background:#fff0f3;border-color:#ffd2dc;color:#8a1c3b"><b>Mantra :</b> « Je n'ai pas besoin d'être motivée pour commencer — je commence, et la motivation suit. »</div>
+    <div class="card" style="background:#fdf3f9;border-color:#f5cce6">
+      • <b>Règle des 5 min</b> : « juste 5 min », et tu finis presque toujours.<br>
+      • <b>Prépare la veille</b> : tenue + sac = zéro excuse.<br>
+      • <b>Objectif</b> : bouger 4-5 jours (coche dans Accueil).<br>
+      • <b>Le week-end avec Steve</b> ❤️<br>
+      • <b>Sois douce</b> : une séance manquée n'efface rien.
+    </div>
+  </div>
+
+  <!-- JOB -->
+  <div class="sec" id="t-job">
+    <h2>💼 Job</h2>
+    <div class="card" style="border-color:#bfe6cd;background:#f6fff9">
+      <span class="pill" style="background:#1f9d55;color:#fff">⭐ Pour quitter Paris</span><br>
+      <b>Rapporteur·e CNDA</b> — chambres de Bordeaux / Lyon / Nantes. Pile ton M2. <a href="https://www.cnda.fr/nous-rejoindre">voir</a>
+    </div>
+    <div class="card">
+      <b>Autres pistes :</b><br>
+      • Officier de protection — OFPRA <a href="https://www.ofpra.gouv.fr/actualites/lofpra-recrute-des-officiers-de-protection-contractuels">voir</a><br>
+      • Juriste — Défenseur des droits (deadline 17/06) <a href="https://choisirleservicepublic.gouv.fr/">voir</a><br>
+      • Programme Officer — EUAA (02/07) <a href="https://www.euaa.europa.eu/careers/vacancies">voir</a>
+    </div>
+    <h3>🧭 Tes 3 voies</h3>
+    <div class="card">
+      <b>1. Bruxelles/UE</b> — <a href="https://ecre.org/news/news/vacancies/">ECRE</a> · <a href="https://picum.org/join-us/">PICUM</a><br>
+      <b>2. DPO/RGPD</b> (reconversion, télétravail) — <a href="https://remotefr.com/competences/juridique">postes</a> · <a href="https://www.cnil.fr/fr/la-certification-des-competences-du-delegue-la-protection-des-donnees">certif</a><br>
+      <b>3. Canada</b> — <a href="https://admission.umontreal.ca/programmes/dess-en-reglementation-canadienne-et-quebecoise-de-limmigration/">DESS Montréal</a><br>
+      <b>Chantier :</b> anglais B2 → C1
+    </div>
+    <h3>🔎 Boards</h3>
+    <div class="card" style="font-size:13px">
+      <a href="https://choisirleservicepublic.gouv.fr/">Service public</a> · <a href="https://careers.un.org/">UN Careers</a> · <a href="https://www.impactpool.org/search/human%20rights">Impactpool</a> · <a href="https://jobs.humanrightscareers.com/">Human Rights Careers</a> · <a href="https://fr.indeed.com/q-juriste-droit-des-%C3%89trangers-t%C3%A9l%C3%A9travail-emplois.html">Indeed télétravail</a>
+    </div>
+  </div>
+
+  <!-- AMOUR -->
+  <div class="sec" id="t-love">
+    <div style="text-align:center;padding:20px 10px">
+      <div style="font-size:42px">💛</div>
+      <h2 style="border:none;color:#c0398b;display:inline-block">Un mot de Steve</h2>
+      <p style="font-size:15px">Je suis tellement fier de toi. Tu as une base rare et plein de portes devant toi. On avance ensemble, un pas à la fois — et quoi qu'il arrive, je suis là, à fond derrière toi.</p>
+      <p style="font-size:16px;font-weight:700;color:#c0398b">Je t'aime fort et je pense à toi toute la journée. 💪💛</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="tabbar" id="tabbar">
+  <button class="on" data-t="accueil"><span class="e">🏠</span>Accueil</button>
+  <button data-t="sport"><span class="e">🏋️</span>Sport</button>
+  <button data-t="repas"><span class="e">🍽️</span>Repas</button>
+  <button data-t="argent"><span class="e">💰</span>Argent</button>
+  <button data-t="motiv"><span class="e">🔥</span>Motiv</button>
+  <button data-t="job"><span class="e">💼</span>Job</button>
+  <button data-t="love"><span class="e">💛</span>Nous</button>
+</div>
+
+<script>
+(function(){
+  var tabbar=document.getElementById('tabbar');
+  tabbar.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b)return;
+    var t=b.getAttribute('data-t');
+    document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on')});
+    document.getElementById('t-'+t).classList.add('on');
+    tabbar.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    window.scrollTo(0,0);
+  });
+
+  function weekKey(){var d=new Date();var o=(d.getDay()+6)%7;d.setDate(d.getDate()-o);return 'ines_track_'+d.toISOString().slice(0,10);}
+  var key=weekKey();
+  var state=JSON.parse(localStorage.getItem(key)||'[0,0,0,0,0,0,0]');
+  function renderTrack(){
+    document.querySelectorAll('#tracker b').forEach(function(b){
+      var i=+b.getAttribute('data-d');
+      b.classList.toggle('done',!!state[i]);
+    });
+    var n=state.reduce(function(a,b){return a+(b?1:0)},0);
+    document.getElementById('streak').textContent = n===0?'Coche tes jours actifs 👆':(n+'/7 jours cette semaine '+(n>=4?'🔥 bravo !':'💪 continue !'));
+  }
+  document.getElementById('tracker').addEventListener('click',function(e){
+    var b=e.target.closest('b'); if(!b)return;
+    var i=+b.getAttribute('data-d'); state[i]=state[i]?0:1;
+    localStorage.setItem(key,JSON.stringify(state)); renderTrack();
+  });
+  renderTrack();
+
+  var pk='ines_pea_'+(new Date().getMonth())+'_'+(new Date().getFullYear());
+  function renderPea(){document.getElementById('peaState').textContent = localStorage.getItem(pk)?'✅ Investi ce mois — bravo !':'';}
+  document.getElementById('peaBtn').addEventListener('click',function(){
+    if(localStorage.getItem(pk)){localStorage.removeItem(pk);}else{localStorage.setItem(pk,'1');} renderPea();
+  });
+  renderPea();
+
+})();
+</script>
+</body>
+</html>
