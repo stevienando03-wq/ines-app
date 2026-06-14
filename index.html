@@ -11,9 +11,9 @@
 <style>
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{margin:0;font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#f4f5f8;color:#222;line-height:1.5}
-  .app{max-width:460px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:74px}
+  .app{max-width:480px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:80px}
   .hdr{background:linear-gradient(135deg,#ff7eb3,#c0398b,#6f42c1);color:#fff;padding:16px 16px 14px;text-align:center}
-  .hdr img{width:74px;height:74px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.7);vertical-align:middle}
+  .ava{width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.22);border:3px solid rgba(255,255,255,.75);display:inline-block;line-height:70px;font-size:34px;text-align:center}
   .hdr h1{font-size:20px;margin:8px 0 2px;font-weight:800}
   .hdr .sub{font-size:12px;opacity:.95}
   .sec{padding:14px 16px;display:none}
@@ -21,6 +21,7 @@
   h2{font-size:17px;color:#1a5fb4;border-bottom:2px solid #1a5fb4;padding-bottom:4px;margin:4px 0 12px}
   h3{font-size:15px;margin:14px 0 6px}
   .card{border:1px solid #e6e6ea;border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
+  .grad{background:linear-gradient(135deg,#6f42c1,#1a5fb4);color:#fff;border:none}
   .pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
   .recap{display:flex;align-items:center;border-radius:10px;overflow:hidden;margin-bottom:8px}
   .recap .ic{width:46px;min-width:46px;text-align:center;font-size:20px;color:#fff;padding:12px 0;font-weight:800}
@@ -28,49 +29,77 @@
   table{width:100%;border-collapse:collapse;font-size:12.5px}
   td{padding:7px;border-bottom:1px solid #eee;vertical-align:top}
   .btn{display:block;width:100%;text-align:center;background:#6f42c1;color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;margin:10px 0;text-decoration:none;cursor:pointer}
-  .btn.green{background:#1f9d55}.btn.gold{background:#b8860b}
+  .btn.green{background:#1f9d55}.btn.gold{background:#b8860b}.btn.pink{background:#c0398b}
   .day{display:flex;gap:6px;justify-content:space-between;margin:10px 0}
   .day b{flex:1;text-align:center;border:2px solid #eadffb;border-radius:10px;padding:8px 0;font-size:13px;cursor:pointer;user-select:none;background:#faf7ff;color:#6f42c1}
   .day b.done{background:#1f9d55;color:#fff;border-color:#1f9d55}
-  .streak{text-align:center;font-size:14px;color:#c0398b;font-weight:700;margin-top:4px}
+  .streak{text-align:center;font-size:13px;color:#c0398b;font-weight:700;margin-top:4px}
+  .bar{height:10px;background:#eee;border-radius:6px;overflow:hidden;margin:6px 0}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,#1f9d55,#6f42c1);width:0}
   a{color:#1a5fb4}
   .note{font-size:12px;color:#888}
-  .tabbar{position:fixed;bottom:0;left:0;right:0;max-width:460px;margin:0 auto;background:#fff;border-top:1px solid #e6e6ea;display:flex;justify-content:space-around;padding:6px 0 8px}
-  .tabbar button{background:none;border:none;font-size:11px;color:#999;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;flex:1}
-  .tabbar button .e{font-size:19px}
+  .water{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+  .water span{font-size:24px;cursor:pointer;filter:grayscale(1);opacity:.5}
+  .water span.full{filter:none;opacity:1}
+  .ex{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;cursor:pointer}
+  .ex .cb{width:20px;height:20px;border:2px solid #cbb5ec;border-radius:5px;flex:0 0 auto;text-align:center;line-height:18px;color:#fff;font-size:13px}
+  .ex.done .cb{background:#1f9d55;border-color:#1f9d55}
+  .ex.done{color:#999;text-decoration:line-through}
+  .timer{text-align:center}
+  .timer .big{font-size:40px;font-weight:800;color:#6f42c1;margin:6px 0}
+  .timer button{background:#eadffb;color:#6f42c1;border:none;border-radius:10px;padding:9px 12px;font-weight:700;margin:3px;cursor:pointer}
+  details{border:1px solid #ffe0c2;border-radius:10px;padding:8px 12px;margin-bottom:8px;background:#fff8f2}
+  summary{font-weight:700;cursor:pointer;font-size:14px;color:#5a2a08}
+  .shop{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer}
+  .shop .cb{width:18px;height:18px;border:2px solid #ffd0a8;border-radius:4px;flex:0 0 auto;text-align:center;line-height:16px;color:#fff;font-size:12px}
+  .shop.done .cb{background:#e8590c;border-color:#e8590c}.shop.done{color:#bbb;text-decoration:line-through}
+  .mood{display:flex;justify-content:space-around;font-size:30px;margin:6px 0}
+  .mood span{cursor:pointer;opacity:.45;filter:grayscale(.6)}
+  .mood span.sel{opacity:1;filter:none;transform:scale(1.18)}
+  .breath{width:130px;height:130px;border-radius:50%;margin:14px auto;background:radial-gradient(circle,#c0398b,#6f42c1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;transition:transform 4s ease-in-out;transform:scale(.6)}
+  .breath.in{transform:scale(1.1)}
+  label{display:block;font-size:13px;font-weight:600;margin:8px 0 3px;color:#444}
+  input,select{width:100%;padding:10px;border:1px solid #ddd;border-radius:9px;font-size:14px;font-family:inherit}
+  .es{background:linear-gradient(135deg,#ffd166,#ef476f);color:#fff;border:none}
+  .tabbar{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:#fff;border-top:1px solid #e6e6ea;display:flex;overflow-x:auto;padding:6px 2px 8px}
+  .tabbar button{background:none;border:none;font-size:10px;color:#999;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:56px;flex:1 0 auto}
+  .tabbar button .e{font-size:18px}
   .tabbar button.on{color:#6f42c1;font-weight:700}
+  .celebrate{text-align:center;font-size:14px;color:#1f9d55;font-weight:700;margin-top:6px;display:none}
 </style>
 </head>
 <body>
 <div class="app">
 
   <div class="hdr">
-    <div style="width:74px;height:74px;border-radius:50%;background:rgba(255,255,255,0.22);border:3px solid rgba(255,255,255,0.75);display:inline-block;line-height:74px;font-size:36px;text-align:center">🌸</div>
+    <div class="ava">🌸</div>
     <h1>Ma semaine 💛</h1>
-    <div class="sub">Sport · Repas · Argent · Motiv · Job — tout au même endroit</div>
+    <div class="sub" id="dateline">Tout pour avancer, à ton rythme</div>
   </div>
 
   <!-- ACCUEIL -->
   <div class="sec on" id="t-accueil">
-    <div class="card" style="background:#faf3fb;border-color:#eccde9">
-      <b>Mon amour 💛</b> je t'aime et je pense fort à toi. Tout est là pour t'aider à avancer, à ton rythme. <span class="note">— Steve</span>
-    </div>
+    <div class="card grad"><b>Aujourd'hui</b> <span id="todayName"></span><div id="todayBox" style="margin-top:6px;font-size:14px"></div></div>
+
+    <div class="card" style="background:#fffef5;border-color:#f0e6b8"><b>💬 Pensée du jour</b><div id="quote" style="font-style:italic;margin-top:3px"></div></div>
+    <div class="card es"><b>🇪🇸 Mot d'espagnol du jour</b><div id="esword" style="margin-top:3px;font-size:15px"></div></div>
 
     <h2>🗓️ En un coup d'œil</h2>
-    <div class="recap"><div class="ic" style="background:#1f9d55">🏋️</div><div class="tx" style="background:#e8f6ee;color:#13351f"><b>Sport</b> — Lun repos · Mar muscu express · Mer yoga · Jeu espagnol · Ven cardio · Sam muscu · Dim cardio long</div></div>
-    <div class="recap"><div class="ic" style="background:#e8590c">🍽️</div><div class="tx" style="background:#fdeede;color:#5a2a08"><b>Cuisine</b> — protéines à chaque repas · porridge overnight · légumes Lidl</div></div>
-    <div class="recap"><div class="ic" style="background:#b8860b">💰</div><div class="tx" style="background:#fdf6df;color:#5a4708"><b>Épargne</b> — mets sur ton PEA + passe l'ordre ETF !</div></div>
-    <div class="recap"><div class="ic" style="background:#c0398b">🔥</div><div class="tx" style="background:#fbe9f4;color:#5c1140"><b>Motiv</b> — règle des 5 min · prépare la veille · sois douce avec toi</div></div>
-    <div class="recap"><div class="ic" style="background:#1a5fb4">💼</div><div class="tx" style="background:#eaf1fb;color:#1c2b46"><b>Job</b> — CNDA/OFPRA (hors Paris) · Bruxelles · DPO · Canada · anglais → C1</div></div>
+    <div class="recap"><div class="ic" style="background:#1f9d55">🏋️</div><div class="tx" style="background:#e8f6ee;color:#13351f"><b>Sport</b> — 2 muscu + 2 cardio + yoga</div></div>
+    <div class="recap"><div class="ic" style="background:#e8590c">🍽️</div><div class="tx" style="background:#fdeede;color:#5a2a08"><b>Cuisine</b> — protéines à chaque repas · Lidl</div></div>
+    <div class="recap"><div class="ic" style="background:#b8860b">💰</div><div class="tx" style="background:#fdf6df;color:#5a4708"><b>Épargne</b> — PEA + passe l'ordre ETF !</div></div>
+    <div class="recap"><div class="ic" style="background:#c0398b">🔥</div><div class="tx" style="background:#fbe9f4;color:#5c1140"><b>Motiv</b> — règle des 5 min · sois douce</div></div>
+    <div class="recap"><div class="ic" style="background:#1a5fb4">💼</div><div class="tx" style="background:#eaf1fb;color:#1c2b46"><b>Job</b> — CNDA/OFPRA · Bruxelles · DPO · Canada</div></div>
 
     <h3>✅ Ma série de la semaine</h3>
-    <div class="day" id="tracker">
-      <b data-d="0">L</b><b data-d="1">M</b><b data-d="2">M</b><b data-d="3">J</b><b data-d="4">V</b><b data-d="5">S</b><b data-d="6">D</b>
-    </div>
+    <div class="day" id="tracker"><b data-d="0">L</b><b data-d="1">M</b><b data-d="2">M</b><b data-d="3">J</b><b data-d="4">V</b><b data-d="5">S</b><b data-d="6">D</b></div>
+    <div class="bar"><i id="weekbar"></i></div>
     <div class="streak" id="streak">Coche tes jours actifs 👆</div>
+    <div class="celebrate" id="celebrate">🎉 Semaine au top, bravo mon amour !</div>
 
-    <a class="btn" id="calBtn" href="semaine-ines.ics" download="ma-semaine.ics">📅 Ajouter à mon calendrier iPhone</a>
-    <div class="note" style="text-align:center">Yoga, espagnol, séances sport & rappel PEA — avec notifications. À ouvrir sur ton iPhone (tape le bouton → « Tout ajouter »).</div>
+    <h3>💧 Mon eau du jour</h3>
+    <div class="water" id="water"></div>
+    <div class="note" id="waterTxt">Objectif : 8 verres</div>
   </div>
 
   <!-- SPORT -->
@@ -81,95 +110,115 @@
       <tr><td><b>Lun</b></td><td>Repos actif (marche 30 min)</td></tr>
       <tr><td><b>Mar</b></td><td>Muscu EXPRESS ~35 min</td></tr>
       <tr><td><b>Mer</b></td><td>Yoga 19h-20h</td></tr>
-      <tr><td><b>Jeu</b></td><td>Espagnol 18h30-20h (+ cardio léger option)</td></tr>
+      <tr><td><b>Jeu</b></td><td>Espagnol 18h30-20h (+ cardio léger)</td></tr>
       <tr><td><b>Ven</b></td><td>Cardio 40 min</td></tr>
       <tr><td><b>Sam</b></td><td>Muscu COMPLÈTE ~1h15 (avec Steve)</td></tr>
       <tr><td><b>Dim</b></td><td>Cardio LONG 45-60 min + étirements</td></tr>
     </table>
-    <h3 style="color:#1a5fb4">⚡ Muscu express (semaine)</h3>
-    <div class="card"><b>Supersets, repos 60 s :</b><br>A. Presse à cuisses + Leg curl — 3×12<br>B. Chest press + Tirage vertical — 3×12<br>C. Curl biceps + Extension triceps — 2×12<br>D. Gainage 3×40 s</div>
-    <h3 style="color:#1f9d55">💪 Muscu complète (week-end)</h3>
-    <div class="card">
-      <b>1. Jambes :</b> Presse 3×12 · Leg curl 3×12 · Abducteurs 3×15<br>
-      <b>2. Poussée :</b> Chest press 3×12 · Développé épaules 3×12<br>
-      <b>3. Tirage :</b> Tirage vertical 3×12 · Rowing 3×12<br>
-      <b>4. Bras :</b> Curl 3×12 · Triceps 3×12<br>
-      <b>5. Abdos :</b> Crunch/planche 3×15
+
+    <h3 style="color:#6f42c1">⏱️ Minuteur de repos</h3>
+    <div class="card timer">
+      <div class="big" id="tdisp">00:00</div>
+      <button onclick="startTimer(45)">45 s</button><button onclick="startTimer(60)">60 s</button><button onclick="startTimer(75)">75 s</button><button onclick="startTimer(90)">90 s</button>
+      <button onclick="stopTimer()" style="background:#f3d6e6;color:#c0398b">stop</button>
     </div>
+
+    <h3 style="color:#1a5fb4">⚡ Muscu express (coche tes exos)</h3>
+    <div class="card" id="exExpress"></div>
+    <h3 style="color:#1f9d55">💪 Muscu complète (week-end)</h3>
+    <div class="card" id="exComplete"></div>
     <div class="note">🏃 Cardio long du dimanche = zone 2 (tu peux parler). Prendre du muscle = +1 peu de charge quand 12 reps deviennent faciles.</div>
   </div>
 
   <!-- REPAS -->
   <div class="sec" id="t-repas">
     <h2 style="color:#e8590c;border-color:#e8590c">🍽️ Repas</h2>
-    <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b>🥣 Petit-déj overnight</b><br>Flocons + yaourt grec + graines de chia + fruits. Préparé la veille, prêt le matin.</div>
-    <h3>5 idées du soir</h3>
-    <div class="card" style="background:#fff8f2;border-color:#ffe0c2">
-      • Poêlée courgettes-aubergines + poulet + boulgour<br>
-      • Ratatouille maison + œufs / feta<br>
-      • Dahl de lentilles + épinards + riz<br>
-      • Saumon + courgettes rôties + patate douce<br>
-      • Wok bœuf ou tofu + légumes + nouilles complètes
-    </div>
-    <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b style="color:#c0392b">💡 Protéines à CHAQUE repas</b><br>œufs · poulet · poisson · lentilles · pois chiches · skyr/yaourt grec · tofu. <span class="note">(tu oublies souvent 😉)</span></div>
-    <div class="note">🛒 Lidl : aubergines · courgettes · poivrons · épinards · fruits rouges · œufs · poulet · saumon · lentilles · pois chiches · yaourt grec · flocons · chia · boulgour.</div>
+    <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b>🥣 Petit-déj overnight</b><br>Flocons + yaourt grec + graines de chia + fruits. Préparé la veille.</div>
+    <h3>5 idées du soir <span class="note">(tape pour la recette)</span></h3>
+    <div id="recipes"></div>
+    <div class="card" style="background:#fff8f2;border-color:#ffe0c2"><b style="color:#c0392b">💡 Protéines à CHAQUE repas</b><br>œufs · poulet · poisson · lentilles · pois chiches · skyr · tofu. <span class="note">(tu oublies souvent 😉)</span></div>
+    <h3>🛒 Liste de courses Lidl <span class="note">(coche)</span></h3>
+    <div class="card" id="shop"></div>
   </div>
 
   <!-- ARGENT -->
   <div class="sec" id="t-argent">
     <h2 style="color:#b8860b;border-color:#b8860b">💰 Argent</h2>
-    <div class="card" style="background:#fffdf0;border-color:#f0e0a8">
-      Pense à <b>mettre de l'argent sur ton PEA</b> ce mois-ci 💛 — et <b>SURTOUT à acheter ton ETF</b> derrière (virer ne suffit pas !). L'idéal : un <b>virement + investissement automatique</b>.
-    </div>
-    <button class="btn gold" id="peaBtn">Marquer « PEA investi ce mois » ✅</button>
+    <div class="card" style="background:#fffdf0;border-color:#f0e0a8">Pense à <b>mettre de l'argent sur ton PEA</b> 💛 — et <b>SURTOUT à acheter ton ETF</b> derrière (virer ne suffit pas !). L'idéal : un <b>virement + investissement automatique</b>.</div>
+    <button class="btn gold" id="peaBtn">Marquer « PEA investi » ce mois ✅</button>
     <div class="streak" id="peaState" style="color:#b8860b"></div>
-    <div class="note">Un rappel mensuel est aussi dans ton calendrier.</div>
+    <h3>📈 Mon historique</h3>
+    <div class="card" id="peaHist" style="font-size:13px"></div>
+    <div class="note">Un rappel mensuel est aussi dans ton calendrier (onglet Agenda).</div>
   </div>
 
-  <!-- MOTIV -->
+  <!-- MOTIV / BIEN-ETRE -->
   <div class="sec" id="t-motiv">
-    <h2 style="color:#c0398b;border-color:#c0398b">🔥 Motivation</h2>
+    <h2 style="color:#c0398b;border-color:#c0398b">🔥 Bien-être</h2>
     <div class="card" style="background:#fff0f3;border-color:#ffd2dc;color:#8a1c3b"><b>Mantra :</b> « Je n'ai pas besoin d'être motivée pour commencer — je commence, et la motivation suit. »</div>
+    <h3>Comment tu te sens aujourd'hui ?</h3>
+    <div class="mood" id="mood"><span data-m="😣">😣</span><span data-m="😕">😕</span><span data-m="😐">😐</span><span data-m="🙂">🙂</span><span data-m="😄">😄</span></div>
+    <div class="note" id="moodTxt" style="text-align:center"></div>
+    <h3>🫁 Respire 1 minute</h3>
+    <div class="card" style="text-align:center">
+      <div class="breath" id="breath">Prête ?</div>
+      <button class="btn pink" id="breathBtn" style="max-width:200px;margin:0 auto">Démarrer</button>
+    </div>
+    <h3>Anti-flemme</h3>
     <div class="card" style="background:#fdf3f9;border-color:#f5cce6">
       • <b>Règle des 5 min</b> : « juste 5 min », et tu finis presque toujours.<br>
       • <b>Prépare la veille</b> : tenue + sac = zéro excuse.<br>
-      • <b>Objectif</b> : bouger 4-5 jours (coche dans Accueil).<br>
       • <b>Le week-end avec Steve</b> ❤️<br>
       • <b>Sois douce</b> : une séance manquée n'efface rien.
     </div>
   </div>
 
+  <!-- AGENDA -->
+  <div class="sec" id="t-agenda">
+    <h2 style="color:#6f42c1;border-color:#6f42c1">📅 Agenda</h2>
+    <div class="card grad">
+      <b>Ma semaine type</b> — yoga, espagnol, séances sport & rappel PEA, qui <b>se répètent chaque semaine</b> avec notifications.
+      <a class="btn" style="background:#fff;color:#6f42c1;margin-top:8px" href="semaine-ines.ics" download="ma-semaine.ics">📲 Ajouter à mon calendrier</a>
+    </div>
+
+    <h3>➕ Créer un événement</h3>
+    <div class="card">
+      <label>Activité *</label><input id="evTitle" placeholder="Ex : RDV médecin, déjeuner…">
+      <label>Avec qui ?</label><input id="evWith" placeholder="Ex : Maman, Dr Martin…">
+      <label>Lieu</label><input id="evLoc" placeholder="Ex : Marseille, à la maison…">
+      <label>Date *</label><input id="evDate" type="date">
+      <div style="display:flex;gap:8px">
+        <div style="flex:1"><label>Début *</label><input id="evStart" type="time" value="18:00"></div>
+        <div style="flex:1"><label>Fin</label><input id="evEnd" type="time" value="19:00"></div>
+      </div>
+      <label>Répéter</label>
+      <select id="evRep"><option value="">Une seule fois</option><option value="WEEKLY">Chaque semaine</option><option value="MONTHLY">Chaque mois</option></select>
+      <label>Rappel</label>
+      <select id="evAlarm"><option value="-PT0M">À l'heure</option><option value="-PT15M" selected>15 min avant</option><option value="-PT30M">30 min avant</option><option value="-PT1H">1 h avant</option><option value="-P1D">1 jour avant</option></select>
+      <button class="btn pink" id="evBtn">📅 Ajouter à mon calendrier</button>
+      <div class="note" id="evMsg" style="text-align:center"></div>
+    </div>
+    <h3>📝 Mes événements créés</h3>
+    <div class="card" id="evList" style="font-size:13px;color:#555">Aucun pour l'instant.</div>
+  </div>
+
   <!-- JOB -->
   <div class="sec" id="t-job">
     <h2>💼 Job</h2>
-    <div class="card" style="border-color:#bfe6cd;background:#f6fff9">
-      <span class="pill" style="background:#1f9d55;color:#fff">⭐ Pour quitter Paris</span><br>
-      <b>Rapporteur·e CNDA</b> — chambres de Bordeaux / Lyon / Nantes. Pile ton M2. <a href="https://www.cnda.fr/nous-rejoindre">voir</a>
-    </div>
-    <div class="card">
-      <b>Autres pistes :</b><br>
-      • Officier de protection — OFPRA <a href="https://www.ofpra.gouv.fr/actualites/lofpra-recrute-des-officiers-de-protection-contractuels">voir</a><br>
-      • Juriste — Défenseur des droits (deadline 17/06) <a href="https://choisirleservicepublic.gouv.fr/">voir</a><br>
-      • Programme Officer — EUAA (02/07) <a href="https://www.euaa.europa.eu/careers/vacancies">voir</a>
-    </div>
+    <div class="card" style="border-color:#bfe6cd;background:#f6fff9"><span class="pill" style="background:#1f9d55;color:#fff">⭐ Pour quitter Paris</span><br><b>Rapporteur·e CNDA</b> — Bordeaux / Lyon / Nantes. Pile ton M2. <a href="https://www.cnda.fr/nous-rejoindre">voir</a></div>
+    <div class="card"><b>Autres pistes :</b><br>• Officier de protection — OFPRA <a href="https://www.ofpra.gouv.fr/actualites/lofpra-recrute-des-officiers-de-protection-contractuels">voir</a><br>• Juriste — Défenseur des droits <a href="https://choisirleservicepublic.gouv.fr/">voir</a><br>• Programme Officer — EUAA <a href="https://www.euaa.europa.eu/careers/vacancies">voir</a></div>
     <h3>🧭 Tes 3 voies</h3>
-    <div class="card">
-      <b>1. Bruxelles/UE</b> — <a href="https://ecre.org/news/news/vacancies/">ECRE</a> · <a href="https://picum.org/join-us/">PICUM</a><br>
-      <b>2. DPO/RGPD</b> (reconversion, télétravail) — <a href="https://remotefr.com/competences/juridique">postes</a> · <a href="https://www.cnil.fr/fr/la-certification-des-competences-du-delegue-la-protection-des-donnees">certif</a><br>
-      <b>3. Canada</b> — <a href="https://admission.umontreal.ca/programmes/dess-en-reglementation-canadienne-et-quebecoise-de-limmigration/">DESS Montréal</a><br>
-      <b>Chantier :</b> anglais B2 → C1
-    </div>
+    <div class="card"><b>1. Bruxelles/UE</b> — <a href="https://ecre.org/news/news/vacancies/">ECRE</a> · <a href="https://picum.org/join-us/">PICUM</a><br><b>2. DPO/RGPD</b> (télétravail) — <a href="https://remotefr.com/competences/juridique">postes</a> · <a href="https://www.cnil.fr/fr/la-certification-des-competences-du-delegue-la-protection-des-donnees">certif</a><br><b>3. Canada</b> — <a href="https://admission.umontreal.ca/programmes/dess-en-reglementation-canadienne-et-quebecoise-de-limmigration/">DESS Montréal</a><br><b>Chantier :</b> anglais B2 → C1</div>
     <h3>🔎 Boards</h3>
-    <div class="card" style="font-size:13px">
-      <a href="https://choisirleservicepublic.gouv.fr/">Service public</a> · <a href="https://careers.un.org/">UN Careers</a> · <a href="https://www.impactpool.org/search/human%20rights">Impactpool</a> · <a href="https://jobs.humanrightscareers.com/">Human Rights Careers</a> · <a href="https://fr.indeed.com/q-juriste-droit-des-%C3%89trangers-t%C3%A9l%C3%A9travail-emplois.html">Indeed télétravail</a>
-    </div>
+    <div class="card" style="font-size:13px"><a href="https://choisirleservicepublic.gouv.fr/">Service public</a> · <a href="https://careers.un.org/">UN Careers</a> · <a href="https://www.impactpool.org/search/human%20rights">Impactpool</a> · <a href="https://jobs.humanrightscareers.com/">Human Rights Careers</a> · <a href="https://fr.indeed.com/q-juriste-droit-des-%C3%89trangers-t%C3%A9l%C3%A9travail-emplois.html">Indeed télétravail</a></div>
   </div>
 
-  <!-- AMOUR -->
+  <!-- NOUS -->
   <div class="sec" id="t-love">
-    <div style="text-align:center;padding:20px 10px">
+    <div style="text-align:center;padding:16px 10px">
       <div style="font-size:42px">💛</div>
       <h2 style="border:none;color:#c0398b;display:inline-block">Un mot de Steve</h2>
+      <div class="card" style="background:#fff0f6;border-color:#f3cfe2;font-size:15px" id="loveDay"></div>
       <p style="font-size:15px">Je suis tellement fier de toi. Tu as une base rare et plein de portes devant toi. On avance ensemble, un pas à la fois — et quoi qu'il arrive, je suis là, à fond derrière toi.</p>
       <p style="font-size:16px;font-weight:700;color:#c0398b">Je t'aime fort et je pense à toi toute la journée. 💪💛</p>
     </div>
@@ -182,49 +231,107 @@
   <button data-t="sport"><span class="e">🏋️</span>Sport</button>
   <button data-t="repas"><span class="e">🍽️</span>Repas</button>
   <button data-t="argent"><span class="e">💰</span>Argent</button>
-  <button data-t="motiv"><span class="e">🔥</span>Motiv</button>
+  <button data-t="motiv"><span class="e">🔥</span>Bien-être</button>
+  <button data-t="agenda"><span class="e">📅</span>Agenda</button>
   <button data-t="job"><span class="e">💼</span>Job</button>
   <button data-t="love"><span class="e">💛</span>Nous</button>
 </div>
 
 <script>
 (function(){
-  var tabbar=document.getElementById('tabbar');
-  tabbar.addEventListener('click',function(e){
-    var b=e.target.closest('button'); if(!b)return;
-    var t=b.getAttribute('data-t');
-    document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on')});
-    document.getElementById('t-'+t).classList.add('on');
-    tabbar.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
-    b.classList.add('on');
-    window.scrollTo(0,0);
-  });
+  var $=function(s){return document.querySelector(s)};
+  function gj(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch(e){return d}}
+  function sj(k,v){localStorage.setItem(k,JSON.stringify(v))}
+  var today=new Date(); var di=(today.getDay()+6)%7;
+  var dn=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
-  function weekKey(){var d=new Date();var o=(d.getDay()+6)%7;d.setDate(d.getDate()-o);return 'ines_track_'+d.toISOString().slice(0,10);}
-  var key=weekKey();
-  var state=JSON.parse(localStorage.getItem(key)||'[0,0,0,0,0,0,0]');
-  function renderTrack(){
-    document.querySelectorAll('#tracker b').forEach(function(b){
-      var i=+b.getAttribute('data-d');
-      b.classList.toggle('done',!!state[i]);
-    });
-    var n=state.reduce(function(a,b){return a+(b?1:0)},0);
-    document.getElementById('streak').textContent = n===0?'Coche tes jours actifs 👆':(n+'/7 jours cette semaine '+(n>=4?'🔥 bravo !':'💪 continue !'));
-  }
-  document.getElementById('tracker').addEventListener('click',function(e){
-    var b=e.target.closest('b'); if(!b)return;
-    var i=+b.getAttribute('data-d'); state[i]=state[i]?0:1;
-    localStorage.setItem(key,JSON.stringify(state)); renderTrack();
-  });
-  renderTrack();
+  var tb=$('#tabbar');
+  tb.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var t=b.getAttribute('data-t');
+    document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on')});$('#t-'+t).classList.add('on');
+    tb.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');window.scrollTo(0,0);});
 
-  var pk='ines_pea_'+(new Date().getMonth())+'_'+(new Date().getFullYear());
-  function renderPea(){document.getElementById('peaState').textContent = localStorage.getItem(pk)?'✅ Investi ce mois — bravo !':'';}
-  document.getElementById('peaBtn').addEventListener('click',function(){
-    if(localStorage.getItem(pk)){localStorage.removeItem(pk);}else{localStorage.setItem(pk,'1');} renderPea();
-  });
-  renderPea();
+  var sessions=['Repos actif — marche 30 min','Muscu EXPRESS ~35 min','Yoga 19h-20h','Cours d\'espagnol 18h30-20h','Cardio 40 min','Muscu COMPLÈTE ~1h15 (avec Steve)','Cardio LONG 45-60 min'];
+  var meals=['Dahl de lentilles + épinards','Poêlée courgettes-aubergines + poulet','Omelette + ratatouille','Curry de pois chiches + riz','Saumon + courgettes + patate douce','Wok bœuf/tofu + légumes','Buddha bowl quinoa'];
+  var rem=['💰 Investir ton PEA · prépare le porridge','🎒 Sac de sport prêt la veille','—','📚 Révise ton espagnol','💧 Hydrate-toi bien','🥩 Protéines + eau après','🛒 Courses Lidl + meal prep'];
+  var quotes=['Tu es plus forte que tu ne le crois 💪','Un petit pas vaut mieux qu\'un grand rêve immobile.','Fais-le pour la fille que tu seras dans 1 an.','La régularité bat la motivation.','Tu n\'as pas à être parfaite, juste régulière.','Chaque séance compte, même la plus courte.','Respire. Tu gères plus que tu ne le penses.','Le progrès, pas la perfection.','Sois fière du chemin déjà fait.','Aujourd\'hui est un bon jour pour prendre soin de toi.','Ta santé est ton meilleur investissement.','Doucement mais sûrement, tu y arrives.','Tu mérites de te sentir bien.','Crois en toi autant que Steve croit en toi 💛'];
+  var es=[['¡Vamos!','Allez, on y va !'],['Tengo hambre','J\'ai faim'],['¿Cómo estás?','Comment vas-tu ?'],['Estoy cansada','Je suis fatiguée'],['Hoy entreno','Aujourd\'hui je m\'entraîne'],['Me siento bien','Je me sens bien'],['Buen provecho','Bon appétit'],['Poco a poco','Petit à petit'],['Sin prisa','Sans se presser'],['Lo estoy logrando','J\'y arrive'],['Cuídate','Prends soin de toi'],['¡Qué rico!','Comme c\'est bon !'],['Necesito agua','J\'ai besoin d\'eau'],['Estoy orgullosa','Je suis fière'],['Mañana será mejor','Demain sera meilleur'],['Trabajo en mi futuro','Je travaille pour mon avenir'],['Respira hondo','Respire profondément'],['Tú puedes','Tu peux le faire'],['Hoy descanso','Aujourd\'hui je me repose'],['Vamos a cocinar','Allons cuisiner']];
+  var love=['Tu illumines mes journées 💛','Je suis chanceux de t\'avoir, Inès.','Penser à toi = sourire automatique 😊','Tu vas y arriver, je n\'ai aucun doute.','Fier de la femme que tu es.','Repose-toi bien, tu le mérites.','Je t\'aime un peu plus chaque jour.','Tu es ma personne préférée 🥰','On forme une sacrée équipe, toi et moi.','Quoi qu\'il arrive, je suis là.','Ta force m\'inspire.','Le meilleur reste à venir, ensemble.'];
+  var recipes=[
+    ['Poêlée courgettes-aubergines + poulet','Coupe courgette + aubergine en dés. Fais revenir 10 min à l\'huile d\'olive. Ajoute le poulet coupé, sel/poivre/herbes. Sers avec du boulgour. ~25 min.'],
+    ['Ratatouille maison + œufs','Aubergine, courgette, poivron, tomate en dés. Mijote 25 min avec ail/herbes. Casse 2 œufs dessus en fin de cuisson. ~30 min.'],
+    ['Dahl de lentilles corail','Fais revenir oignon + curry. Ajoute 200 g lentilles corail + 50 cl eau + lait de coco. Mijote 18 min. Ajoute épinards. Sers avec riz. ~25 min.'],
+    ['Saumon + courgettes rôties','Courgettes + patate douce en tranches au four 25 min (200°). Ajoute le pavé de saumon les 12 dernières min. Citron. ~30 min.'],
+    ['Wok tofu/bœuf + légumes','Fais sauter tofu (ou bœuf) à feu vif. Ajoute légumes croquants + sauce soja + gingembre. Sers avec nouilles complètes. ~20 min.']
+  ];
+  var shopItems=['Aubergines','Courgettes','Poivrons','Épinards','Fruits rouges','Bananes','Œufs','Poulet','Saumon','Lentilles corail','Pois chiches','Yaourt grec / skyr','Flocons d\'avoine','Graines de chia','Boulgour / quinoa','Tofu'];
+  var exExpress=['A. Presse à cuisses + Leg curl — 3×12','B. Chest press + Tirage vertical — 3×12','C. Curl biceps + Extension triceps — 2×12','D. Gainage 3×40 s'];
+  var exComplete=['Presse à cuisses 3×12','Leg curl 3×12','Abducteurs 3×15','Chest press 3×12','Développé épaules 3×12','Tirage vertical 3×12','Rowing 3×12','Curl biceps 3×12','Triceps 3×12','Abdos 3×15'];
 
+  var doy=Math.floor((today-new Date(today.getFullYear(),0,0))/864e5);
+  $('#dateline').textContent=dn[di]+' — ta journée';
+  $('#todayName').textContent='· '+dn[di];
+  $('#todayBox').innerHTML='🏋️ '+sessions[di]+'<br>🍽️ '+meals[di]+(rem[di]!=='—'?'<br>🔔 '+rem[di]:'');
+  $('#quote').textContent='« '+quotes[doy%quotes.length]+' »';
+  $('#esword').innerHTML='<b>'+es[doy%es.length][0]+'</b> — '+es[doy%es.length][1];
+  $('#loveDay').textContent=love[doy%love.length];
+
+  function wkey(){var d=new Date();var o=(d.getDay()+6)%7;d.setDate(d.getDate()-o);return 'trk_'+d.toISOString().slice(0,10);}
+  var tk=wkey(),ts=gj(tk,[0,0,0,0,0,0,0]);
+  function rtrk(){document.querySelectorAll('#tracker b').forEach(function(b){b.classList.toggle('done',!!ts[+b.getAttribute('data-d')])});
+    var n=ts.reduce(function(a,b){return a+(b?1:0)},0);$('#weekbar').style.width=(n/7*100)+'%';
+    $('#streak').textContent=n===0?'Coche tes jours actifs 👆':n+'/7 jours '+(n>=4?'🔥':'💪');
+    $('#celebrate').style.display=n>=5?'block':'none';}
+  $('#tracker').addEventListener('click',function(e){var b=e.target.closest('b');if(!b)return;var i=+b.getAttribute('data-d');ts[i]=ts[i]?0:1;sj(tk,ts);rtrk();});rtrk();
+
+  var wk='water_'+today.toISOString().slice(0,10),wv=gj(wk,0),wbox=$('#water');
+  for(var i=0;i<8;i++){var s=document.createElement('span');s.textContent='💧';s.setAttribute('data-i',i);wbox.appendChild(s);}
+  function rwater(){wbox.querySelectorAll('span').forEach(function(s,i){s.classList.toggle('full',i<wv)});$('#waterTxt').textContent=wv+'/8 verres'+(wv>=8?' 🎉':'');}
+  wbox.addEventListener('click',function(e){var s=e.target.closest('span');if(!s)return;var i=+s.getAttribute('data-i');wv=(i+1===wv)?i:i+1;sj(wk,wv);rwater();});rwater();
+
+  function buildEx(arr,el,key){var box=$(el),st=gj(key,{});arr.forEach(function(t,i){var d=document.createElement('div');d.className='ex'+(st[i]?' done':'');d.innerHTML='<span class="cb">'+(st[i]?'✓':'')+'</span>'+t;d.addEventListener('click',function(){st[i]=st[i]?0:1;sj(key,st);d.classList.toggle('done',!!st[i]);d.querySelector('.cb').textContent=st[i]?'✓':'';});box.appendChild(d);});}
+  var exk='ex_'+today.toISOString().slice(0,10);
+  buildEx(exExpress,'#exExpress',exk+'_e');buildEx(exComplete,'#exComplete',exk+'_c');
+
+  var tInt=null,tLeft=0;
+  window.startTimer=function(s){clearInterval(tInt);tLeft=s;upT();tInt=setInterval(function(){tLeft--;upT();if(tLeft<=0){clearInterval(tInt);if(navigator.vibrate)navigator.vibrate(400);$('#tdisp').textContent='✅ Go !';}},1000);};
+  window.stopTimer=function(){clearInterval(tInt);$('#tdisp').textContent='00:00';};
+  function upT(){var m=Math.floor(tLeft/60),s=tLeft%60;$('#tdisp').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+
+  var rbox=$('#recipes');recipes.forEach(function(r){var d=document.createElement('details');d.innerHTML='<summary>'+r[0]+'</summary><div style="font-size:13px;margin-top:6px;color:#5a2a08">'+r[1]+'</div>';rbox.appendChild(d);});
+
+  var shk='shop_'+wkey(),sst=gj(shk,{}),sbox=$('#shop');
+  shopItems.forEach(function(t,i){var d=document.createElement('div');d.className='shop'+(sst[i]?' done':'');d.innerHTML='<span class="cb">'+(sst[i]?'✓':'')+'</span>'+t;d.addEventListener('click',function(){sst[i]=sst[i]?0:1;sj(shk,sst);d.classList.toggle('done',!!sst[i]);d.querySelector('.cb').textContent=sst[i]?'✓':'';});sbox.appendChild(d);});
+
+  var pmk='pea_'+today.getFullYear()+'_'+today.getMonth();
+  function rpea(){$('#peaState').textContent=localStorage.getItem(pmk)?'✅ Investi ce mois — bravo !':'';
+    var h='',M=['jan','fév','mar','avr','mai','jui','juil','aoû','sep','oct','nov','déc'];for(var k=5;k>=0;k--){var d=new Date(today.getFullYear(),today.getMonth()-k,1);h+=(localStorage.getItem('pea_'+d.getFullYear()+'_'+d.getMonth())?'🟢':'⚪')+' '+M[d.getMonth()]+'   ';}$('#peaHist').textContent=h;}
+  $('#peaBtn').addEventListener('click',function(){if(localStorage.getItem(pmk))localStorage.removeItem(pmk);else localStorage.setItem(pmk,'1');rpea();});rpea();
+
+  var mk='mood_'+today.toISOString().slice(0,10);
+  function rmood(){var v=localStorage.getItem(mk);document.querySelectorAll('#mood span').forEach(function(s){s.classList.toggle('sel',s.getAttribute('data-m')===v)});$('#moodTxt').textContent=v?'Noté pour aujourd\'hui 💛':'';}
+  $('#mood').addEventListener('click',function(e){var s=e.target.closest('span');if(!s)return;localStorage.setItem(mk,s.getAttribute('data-m'));rmood();});rmood();
+
+  var bOn=false,bInt=null;
+  $('#breathBtn').addEventListener('click',function(){var c=$('#breath');if(bOn){bOn=false;clearInterval(bInt);c.classList.remove('in');c.textContent='Prête ?';this.textContent='Démarrer';return;}
+    bOn=true;this.textContent='Stop';function cyc(){c.classList.add('in');c.textContent='Inspire…';setTimeout(function(){if(!bOn)return;c.classList.remove('in');c.textContent='Expire…';},4000);}cyc();bInt=setInterval(cyc,8000);});
+
+  function evRender(){var l=gj('myEvents',[]);$('#evList').innerHTML=l.length?l.map(function(e){return '• '+e}).join('<br>'):'Aucun pour l\'instant.';}
+  evRender();
+  $('#evBtn').addEventListener('click',function(){
+    var t=$('#evTitle').value.trim(),w=$('#evWith').value.trim(),lo=$('#evLoc').value.trim(),d=$('#evDate').value,st0=$('#evStart').value,en=$('#evEnd').value||st0;
+    if(!t||!d||!st0){$('#evMsg').textContent='Remplis au moins l\'activité, la date et l\'heure 🙏';return;}
+    var sum=t+(w?' avec '+w:'');var dt=d.replace(/-/g,'');var st=dt+'T'+st0.replace(':','')+'00',et=dt+'T'+en.replace(':','')+'00';
+    var rep=$('#evRep').value,al=$('#evAlarm').value;
+    var v=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Ma semaine//FR','BEGIN:VEVENT','UID:'+(+today+Math.floor(performance.now()))+'@masemaine','SUMMARY:'+sum];
+    if(lo)v.push('LOCATION:'+lo);if(w)v.push('DESCRIPTION:Avec '+w);
+    v.push('DTSTART:'+st,'DTEND:'+et);if(rep)v.push('RRULE:FREQ='+rep);
+    v.push('BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+sum,'TRIGGER:'+al,'END:VALARM','END:VEVENT','END:VCALENDAR');
+    var blob=new Blob([v.join('\r\n')],{type:'text/calendar'});var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download=(t.replace(/[^a-z0-9]/gi,'-')||'evenement')+'.ics';document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);
+    var lbl=sum+' — '+d+' '+st0;var l=gj('myEvents',[]);l.unshift(lbl);sj('myEvents',l.slice(0,20));evRender();
+    $('#evMsg').textContent='Événement créé ✅ (ouvre le fichier pour l\'ajouter)';$('#evTitle').value='';$('#evWith').value='';$('#evLoc').value='';
+  });
 })();
 </script>
 </body>
