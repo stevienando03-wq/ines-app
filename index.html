@@ -105,6 +105,8 @@
     <div class="card" id="weatherCard" style="display:none"></div>
     <div class="card" id="challengeCard" style="background:#eef9f0;border-color:#bfe6cd"></div>
     <div class="card grad"><b>Aujourd'hui</b> <span id="todayName"></span><div id="todayBox" style="margin-top:6px;font-size:14px"></div></div>
+    <h3>📝 Mes tâches</h3>
+    <div class="card"><div style="display:flex;gap:6px"><input id="tdIn" placeholder="Une tâche…" style="flex:1"><button class="btn" id="tdBtn" style="width:auto;margin:0;padding:10px 14px">+</button></div><div id="tdList" style="margin-top:8px"></div></div>
 
     <h3>🇪🇸 Quiz express d'espagnol</h3>
     <div class="card" id="quizCard"></div>
@@ -197,6 +199,12 @@
     <div class="streak" id="peaState" style="color:#b8860b"></div>
     <h3>📈 Mon historique</h3>
     <div class="card" id="peaHist" style="font-size:13px"></div>
+    <h3>🎯 Objectif d'épargne</h3>
+    <div class="card">
+      <div style="display:flex;gap:8px"><div style="flex:1"><label>Objectif (€)</label><input id="savT" type="number" placeholder="ex 10000"></div><div style="flex:1"><label>Actuel (€)</label><input id="savC" type="number" placeholder="ex 3000"></div></div>
+      <div class="bar" style="margin-top:8px"><i id="savBar"></i></div>
+      <div class="note" id="savTxt"></div>
+    </div>
   </div>
 
   <!-- BIEN-ETRE -->
@@ -208,6 +216,10 @@
     <div class="note" id="moodTxt" style="text-align:center"></div>
     <h3>🫁 Respire 1 minute</h3>
     <div class="card" style="text-align:center"><div class="breath" id="breath">Prête ?</div><button class="btn pink" id="breathBtn" style="max-width:200px;margin:0 auto">Démarrer</button></div>
+    <h3>🎯 Focus (Pomodoro)</h3>
+    <div class="card timer"><div class="big" id="pomo">25:00</div><div class="note" id="pomoPhase">Travail</div><button onclick="pomoStart()">Démarrer</button><button onclick="pomoStop()" style="background:#f3d6e6;color:#c0398b">Stop</button></div>
+    <h3>📈 Mon humeur (14 jours)</h3>
+    <div class="card" id="moodHist" style="font-size:20px;letter-spacing:3px;word-break:break-all"></div>
     <h3>🙏 Gratitude du jour</h3>
     <div class="card"><textarea id="grat" rows="2" placeholder="Une chose pour laquelle tu es reconnaissante…"></textarea><div class="note" id="gratMsg"></div></div>
     <h3>📔 Mon journal</h3>
@@ -222,6 +234,17 @@
     <div class="card"><button class="btn pink" id="notifBtn" style="margin-top:0">Activer les rappels</button><div class="note" id="notifMsg">Le plus fiable reste le calendrier (onglet Agenda) — il marche même app fermée.</div></div>
     <h3>Anti-flemme</h3>
     <div class="card" style="background:#fdf3f9;border-color:#f5cce6">• <b>Règle des 5 min</b> : « juste 5 min », et tu finis presque toujours.<br>• <b>Prépare la veille</b> : tenue + sac = zéro excuse.<br>• <b>Le week-end avec Steve</b> ❤️<br>• <b>Sois douce</b> : une séance manquée n'efface rien.</div>
+  </div>
+
+  <!-- CYCLE -->
+  <div class="sec" id="t-cycle">
+    <h2 style="color:#c0398b;border-color:#c0398b">🌸 Mon cycle</h2>
+    <div class="card grad" id="cycleInfo" style="text-align:center">—</div>
+    <button class="btn pink" id="cyToday">🌸 Mes règles ont commencé aujourd'hui</button>
+    <div class="card"><label>Ou enregistrer une autre date</label><div style="display:flex;gap:8px"><input id="cyDate" type="date" style="flex:1"><button class="btn" id="cyAdd" style="width:auto;margin:0;padding:10px 16px">Ajouter</button></div></div>
+    <h3>Historique</h3>
+    <div class="card" id="cyList" style="font-size:13px"></div>
+    <div class="note">Estimations indicatives, basées sur ton historique (≥ 2 cycles pour une prédiction).</div>
   </div>
 
   <!-- AGENDA -->
@@ -303,6 +326,7 @@
   <button data-t="repas"><span class="e">🍽️</span>Repas</button>
   <button data-t="argent"><span class="e">💰</span>Argent</button>
   <button data-t="motiv"><span class="e">🔥</span>Bien-être</button>
+  <button data-t="cycle"><span class="e">🌸</span>Cycle</button>
   <button data-t="agenda"><span class="e">📅</span>Agenda</button>
   <button data-t="job"><span class="e">💼</span>Job</button>
   <button data-t="love"><span class="e">💛</span>Nous</button>
@@ -520,6 +544,41 @@
   function cqRender(){var l=gj('myQuotes',[]);$('#cqList').innerHTML=l.length?l.map(function(q,i){return '« '+q+' » <span data-i="'+i+'" class="cqDel" style="color:#c0398b;cursor:pointer">✕</span>'}).join('<br>'):'<span class="note">Ajoute tes citations préférées 💛 (visibles dans la Pensée du jour).</span>';
     document.querySelectorAll('.cqDel').forEach(function(e){e.addEventListener('click',function(){var l=gj('myQuotes',[]);l.splice(+this.getAttribute('data-i'),1);sj('myQuotes',l);cqRender();});});}
   $('#cqBtn').addEventListener('click',function(){var v=$('#cqIn').value.trim();if(!v)return;var l=gj('myQuotes',[]);l.push(v);sj('myQuotes',l);$('#cqIn').value='';cqRender();});cqRender();
+
+  // tâches
+  function tdRender(){var l=gj('todos',[]);var box=$('#tdList');if(!l.length){box.innerHTML='<span class="note">Aucune tâche.</span>';return;}box.innerHTML='';
+    l.forEach(function(t,i){var d=document.createElement('div');d.className='ex'+(t.done?' done':'');d.innerHTML='<span class="cb">'+(t.done?'✓':'')+'</span><span style="flex:1">'+t.t+'</span><span class="tdDel" style="color:#c0398b;cursor:pointer">✕</span>';
+      d.querySelector('.cb').addEventListener('click',function(){t.done=t.done?0:1;sj('todos',l);tdRender();});
+      d.querySelector('.tdDel').addEventListener('click',function(){l.splice(i,1);sj('todos',l);tdRender();});box.appendChild(d);});}
+  $('#tdBtn').addEventListener('click',function(){var v=$('#tdIn').value.trim();if(!v)return;var l=gj('todos',[]);l.push({t:v,done:0});sj('todos',l);$('#tdIn').value='';tdRender();});tdRender();
+
+  // objectif d'épargne
+  function savRender(){var t=+(LG('savT')||0),c=+(LG('savC')||0);var pct=t>0?Math.min(100,Math.round(c/t*100)):0;$('#savBar').style.width=pct+'%';$('#savTxt').textContent=t>0?(c+' € / '+t+' € ('+pct+'%)'+(c>=t?' 🎉 objectif atteint !':'')):'Renseigne ton objectif et ton épargne actuelle.';}
+  $('#savT').value=LG('savT')||'';$('#savC').value=LG('savC')||'';
+  $('#savT').addEventListener('input',function(){LS('savT',this.value);savRender();});
+  $('#savC').addEventListener('input',function(){LS('savC',this.value);savRender();});savRender();
+
+  // Pomodoro
+  var pInt=null,pLeft=1500,pWork=true;
+  function pUpd(){var m=Math.floor(pLeft/60),s=pLeft%60;$('#pomo').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;$('#pomoPhase').textContent=pWork?'Travail 💪':'Pause ☕';}
+  window.pomoStart=function(){if(pInt)return;pInt=setInterval(function(){pLeft--;if(pLeft<0){pWork=!pWork;pLeft=(pWork?25:5)*60;try{if(window.Notification&&Notification.permission==='granted')new Notification(pWork?'Au travail 💪':'Pause ☕');}catch(e){}if(navigator.vibrate)navigator.vibrate(300);}pUpd();},1000);};
+  window.pomoStop=function(){clearInterval(pInt);pInt=null;pWork=true;pLeft=1500;pUpd();};pUpd();
+
+  // humeur 14 jours
+  (function(){var h='';for(var k=13;k>=0;k--){var d=new Date(today);d.setDate(d.getDate()-k);var v=LG('mood_'+d.toISOString().slice(0,10));h+=(v||'·')+' ';}$('#moodHist').textContent=h.trim();})();
+
+  // cycle menstruel
+  function cyDays(a,b){return Math.round((new Date(b)-new Date(a))/864e5);}
+  function cyRender(){var l=gj('periods',[]);l.sort();
+    if(!l.length){$('#cycleInfo').innerHTML='Ajoute le 1er jour de tes règles pour démarrer 🌸';$('#cyList').innerHTML='<span class="note">Aucune date.</span>';return;}
+    var last=l[l.length-1];var avg=28;if(l.length>=2){var s=0;for(var i=1;i<l.length;i++)s+=cyDays(l[i-1],l[i]);avg=Math.round(s/(l.length-1));}
+    var cd=cyDays(last,iso)+1;var nd=new Date(last);nd.setDate(nd.getDate()+avg);var ndi=nd.toISOString().slice(0,10);var until=cyDays(iso,ndi);
+    $('#cycleInfo').innerHTML='<b>Jour '+cd+'</b> de ton cycle<br>Prochaines règles ~ '+nd.toLocaleDateString('fr-FR')+(until>=0?' (dans '+until+' j)':' (bientôt)')+'<br><span style="opacity:.85;font-size:13px">Cycle moyen : '+avg+' jours</span>';
+    $('#cyList').innerHTML=l.slice().reverse().map(function(x){return '🌸 '+new Date(x).toLocaleDateString('fr-FR')+' <span class="cyDel" data-d="'+x+'" style="color:#c0398b;cursor:pointer">✕</span>'}).join('<br>');
+    document.querySelectorAll('.cyDel').forEach(function(e){e.addEventListener('click',function(){var l=gj('periods',[]);var d=this.getAttribute('data-d');var k=l.indexOf(d);if(k>=0)l.splice(k,1);sj('periods',l);cyRender();});});}
+  function cyAddDate(ds){var l=gj('periods',[]);if(l.indexOf(ds)<0){l.push(ds);sj('periods',l);}cyRender();}
+  $('#cyToday').addEventListener('click',function(){cyAddDate(iso);});
+  $('#cyAdd').addEventListener('click',function(){var d=$('#cyDate').value;if(d)cyAddDate(d);});cyRender();
 })();
 </script>
 </body>
