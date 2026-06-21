@@ -107,6 +107,8 @@
     <div class="card grad"><b>Aujourd'hui</b> <span id="todayName"></span><div id="todayBox" style="margin-top:6px;font-size:14px"></div></div>
     <h3>📝 Mes tâches</h3>
     <div class="card"><div style="display:flex;gap:6px"><input id="tdIn" placeholder="Une tâche…" style="flex:1"><button class="btn" id="tdBtn" style="width:auto;margin:0;padding:10px 14px">+</button></div><div id="tdList" style="margin-top:8px"></div></div>
+    <h3>🎯 Objectifs de la semaine</h3>
+    <div class="card" id="weekGoals"></div>
 
     <h3>🇪🇸 Quiz express d'espagnol</h3>
     <div class="card" id="quizCard"></div>
@@ -220,6 +222,9 @@
     <div class="card timer"><div class="big" id="pomo">25:00</div><div class="note" id="pomoPhase">Travail</div><button onclick="pomoStart()">Démarrer</button><button onclick="pomoStop()" style="background:#f3d6e6;color:#c0398b">Stop</button></div>
     <h3>📈 Mon humeur (14 jours)</h3>
     <div class="card" id="moodHist" style="font-size:20px;letter-spacing:3px;word-break:break-all"></div>
+    <h3>🧘 Méditations guidées</h3>
+    <div class="card" id="medList"></div>
+    <div class="card" id="medPlay" style="display:none;text-align:center"><div id="medStep" style="font-size:16px;min-height:50px;display:flex;align-items:center;justify-content:center"></div><button class="btn pink" id="medStop" style="max-width:160px;margin:8px auto">Arrêter</button></div>
     <h3>🙏 Gratitude du jour</h3>
     <div class="card"><textarea id="grat" rows="2" placeholder="Une chose pour laquelle tu es reconnaissante…"></textarea><div class="note" id="gratMsg"></div></div>
     <h3>📔 Mon journal</h3>
@@ -231,7 +236,9 @@
     <h3>😴 Mon sommeil</h3>
     <div class="card"><div style="display:flex;gap:8px"><input id="slIn" type="number" step="0.5" placeholder="heures" style="flex:1"><button class="btn" id="slBtn" style="width:auto;margin:0;padding:10px 16px">Ajouter</button></div><div id="slList" style="font-size:13px;margin-top:8px;color:#555"></div></div>
     <h3>🔔 Rappels</h3>
-    <div class="card"><button class="btn pink" id="notifBtn" style="margin-top:0">Activer les rappels</button><div class="note" id="notifMsg">Le plus fiable reste le calendrier (onglet Agenda) — il marche même app fermée.</div></div>
+    <div class="card"><button class="btn pink" id="notifBtn" style="margin-top:0">Activer les rappels</button>
+      <button class="btn" id="hydraBtn" style="background:#1a5fb4;margin-top:8px">💧 Rappel d'hydratation : OFF</button>
+      <div class="note" id="notifMsg">Le plus fiable reste le calendrier (onglet Agenda) — il marche même app fermée.</div></div>
     <h3>Anti-flemme</h3>
     <div class="card" style="background:#fdf3f9;border-color:#f5cce6">• <b>Règle des 5 min</b> : « juste 5 min », et tu finis presque toujours.<br>• <b>Prépare la veille</b> : tenue + sac = zéro excuse.<br>• <b>Le week-end avec Steve</b> ❤️<br>• <b>Sois douce</b> : une séance manquée n'efface rien.</div>
   </div>
@@ -441,8 +448,10 @@
   [['en','🇬🇧 Anglais 10 min'],['es','🇪🇸 Espagnol 10 min']].forEach(function(p){var d=document.createElement('div');d.className='ex'+(lv[p[0]]?' done':'');d.innerHTML='<span class="cb">'+(lv[p[0]]?'✓':'')+'</span>'+p[1];d.addEventListener('click',function(){lv[p[0]]=lv[p[0]]?0:1;sj(lk,lv);d.classList.toggle('done',!!lv[p[0]]);d.querySelector('.cb').textContent=lv[p[0]]?'✓':'';updateLevel();});lbox.appendChild(d);});
 
   function rwl(){var l=gj('weights',[]);if(!l.length){$('#wList').textContent='Aucune mesure encore.';$('#wSpark').innerHTML='';return;}
-    var h='';for(var i=0;i<Math.min(6,l.length);i++){var c=l[i],ar='';if(i<l.length-1){var df=c.kg-l[i+1].kg;ar=df>0?' 🔺':(df<0?' 🔻':' ▪');}h+=c.d+' : '+c.kg+' kg'+ar+'<br>';}$('#wList').innerHTML=h;
-    var pts=l.slice(0,12).reverse().map(function(x){return x.kg});if(pts.length>1){var mn=Math.min.apply(null,pts),mx=Math.max.apply(null,pts),rng=(mx-mn)||1,W=300,H=50;var d='';pts.forEach(function(v,i){var x=i/(pts.length-1)*W,y=H-((v-mn)/rng)*H;d+=(i?'L':'M')+x.toFixed(0)+','+y.toFixed(0)+' ';});$('#wSpark').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" style="width:100%;height:50px"><polyline fill="none" stroke="#6f42c1" stroke-width="3" points="'+d.replace(/[ML]/g,'').trim()+'"/></svg>';}else{$('#wSpark').innerHTML='';}}
+    var cur=l[0].kg,start=l[l.length-1].kg,delta=(cur-start).toFixed(1);
+    var head=l.length>1?('<b>'+start+' → '+cur+' kg</b> ('+(delta>0?'+':'')+delta+' kg '+(delta>0?'🔺':(delta<0?'🔻':'▪'))+')<br><span class="note">depuis ta 1re mesure</span><br>'):'<b>'+cur+' kg</b><br>';
+    var h='';for(var i=0;i<Math.min(6,l.length);i++){var c=l[i],ar='';if(i<l.length-1){var df=c.kg-l[i+1].kg;ar=df>0?' 🔺':(df<0?' 🔻':' ▪');}h+=c.d+' : '+c.kg+' kg'+ar+'<br>';}$('#wList').innerHTML=head+h;
+    var pts=l.slice(0,16).reverse().map(function(x){return x.kg});if(pts.length>1){var mn=Math.min.apply(null,pts),mx=Math.max.apply(null,pts),rng=(mx-mn)||1,W=300,H=70;var d='';pts.forEach(function(v,i){var x=i/(pts.length-1)*W,y=H-((v-mn)/rng)*(H-8)-4;d+=(i?'L':'M')+x.toFixed(0)+','+y.toFixed(0)+' ';});$('#wSpark').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" style="width:100%;height:70px;background:#faf7ff;border-radius:8px"><polyline fill="none" stroke="#6f42c1" stroke-width="3" points="'+d.replace(/[ML]/g,'').trim()+'"/></svg><div class="note" style="display:flex;justify-content:space-between"><span>'+mn+' kg</span><span>'+mx+' kg</span></div>';}else{$('#wSpark').innerHTML='';}}
   $('#wBtn').addEventListener('click',function(){var v=parseFloat($('#wIn').value);if(!v)return;var l=gj('weights',[]);l.unshift({d:iso.slice(5),kg:v});sj('weights',l.slice(0,40));$('#wIn').value='';rwl();});rwl();
 
   $('#notifBtn').addEventListener('click',function(){if(!('Notification' in window)){$('#notifMsg').textContent='Notifications non supportées sur ce navigateur — utilise le calendrier.';return;}
@@ -579,6 +588,29 @@
   function cyAddDate(ds){var l=gj('periods',[]);if(l.indexOf(ds)<0){l.push(ds);sj('periods',l);}cyRender();}
   $('#cyToday').addEventListener('click',function(){cyAddDate(iso);});
   $('#cyAdd').addEventListener('click',function(){var d=$('#cyDate').value;if(d)cyAddDate(d);});cyRender();
+
+  // objectifs de la semaine (mis à jour ici par Steve, cochables, remis à zéro chaque semaine)
+  var weekObjectives=['🏋️ 3 séances de sport (2 muscu + 1 cardio)','🇪🇸 Réviser l\'espagnol 3 fois','💼 Postuler à 2 offres (CNDA / OFPRA)','💰 Alimenter + investir le PEA','💧 8 verres d\'eau chaque jour','😴 Dormir 7-8 h','🧘 1 yoga + 1 méditation'];
+  (function(){var key='wkgoals_'+wkey().slice(4),st=gj(key,{}),box=$('#weekGoals');weekObjectives.forEach(function(t,i){var d=document.createElement('div');d.className='ex'+(st[i]?' done':'');d.innerHTML='<span class="cb">'+(st[i]?'✓':'')+'</span>'+t;d.addEventListener('click',function(){st[i]=st[i]?0:1;sj(key,st);d.classList.toggle('done',!!st[i]);d.querySelector('.cb').textContent=st[i]?'✓':'';});box.appendChild(d);});})();
+
+  // rappel d'hydratation (toutes les 2 h, app ouverte)
+  var hydraInt=null;
+  function hydraSet(on){LS('hydra',on?'1':'0');$('#hydraBtn').textContent='💧 Rappel d\'hydratation : '+(on?'ON':'OFF');$('#hydraBtn').style.background=on?'#1f9d55':'#1a5fb4';if(hydraInt){clearInterval(hydraInt);hydraInt=null;}if(on){hydraInt=setInterval(function(){try{if(window.Notification&&Notification.permission==='granted')new Notification('💧 Hydrate-toi !',{body:'Bois un verre d\'eau, mon amour 💛'});}catch(e){}},7200000);}}
+  $('#hydraBtn').addEventListener('click',function(){var on=LG('hydra')!=='1';if(on&&window.Notification&&Notification.permission!=='granted'){try{Notification.requestPermission();}catch(e){}}hydraSet(on);});
+  hydraSet(LG('hydra')==='1');
+
+  // méditations guidées (avec voix)
+  function speakFr(t){try{var u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
+  var meditations=[
+    {name:'Respiration 4-7-8 (1 min)',steps:[['Installe-toi confortablement, épaules relâchées…',4],['Inspire par le nez… 1, 2, 3, 4',4],['Retiens ton souffle…',7],['Expire lentement par la bouche…',8],['Inspire…',4],['Retiens…',7],['Expire…',8],['Encore : inspire…',4],['Retiens…',7],['Expire…',8],['Bravo. Reviens en douceur 💛',4]]},
+    {name:'Ancrage 5-4-3-2-1 (1 min)',steps:[['Pose tes pieds bien à plat au sol.',4],['Nomme 5 choses que tu vois autour de toi…',9],['4 choses que tu entends…',8],['3 choses que tu peux toucher…',8],['2 odeurs ou 2 choses que tu sens…',7],['1 chose que tu aimes chez toi 💛',7],['Respire profondément. Tu es là, présente.',6]]},
+    {name:'Scan corporel (2 min)',steps:[['Ferme les yeux. Respire calmement.',6],['Détends ton front, ta mâchoire…',12],['Relâche tes épaules, ta nuque…',12],['Détends tes bras, tes mains…',12],['Relâche ton ventre, ton dos…',12],['Détends tes jambes, tes pieds…',12],['Tout ton corps est lourd et calme…',12],['Savoure ce calme… reviens doucement 💛',8]]}
+  ];
+  var medT=null;
+  function medStop(){if(medT)clearTimeout(medT);medT=null;try{speechSynthesis.cancel();}catch(e){}$('#medPlay').style.display='none';$('#medList').style.display='block';}
+  function medRun(m){$('#medList').style.display='none';$('#medPlay').style.display='block';var i=0;function step(){if(i>=m.steps.length){medStop();return;}var s=m.steps[i];$('#medStep').textContent=s[0];speakFr(s[0]);medT=setTimeout(function(){i++;step();},s[1]*1000);}step();}
+  (function(){var box=$('#medList');meditations.forEach(function(m){var b=document.createElement('button');b.className='btn';b.style.cssText='background:#6f42c1;margin:6px 0';b.textContent='▶ '+m.name;b.addEventListener('click',function(){medRun(m);});box.appendChild(b);});})();
+  $('#medStop').addEventListener('click',medStop);
 })();
 </script>
 </body>
